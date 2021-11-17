@@ -1,19 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="INTERNET_BANKING_DW1_3C2021ModelStoreContainer" CdmEntityContainer="INTERNET_BANKING_DW1_3C2021Entities">
-    <EntitySetMapping Name="Cuenta">
-      <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Cuenta">
-        <MappingFragment StoreEntitySet="Cuenta">
-          <ScalarProperty Name="Codigo" ColumnName="Codigo" />
-          <ScalarProperty Name="CodigoUsuario" ColumnName="CodigoUsuario" />
-          <ScalarProperty Name="CodigoMoneda" ColumnName="CodigoMoneda" />
-          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-          <ScalarProperty Name="IBAN" ColumnName="IBAN" />
-          <ScalarProperty Name="Saldo" ColumnName="Saldo" />
-          <ScalarProperty Name="Estado" ColumnName="Estado" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Error">
       <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Error">
         <MappingFragment StoreEntitySet="Error">
@@ -47,17 +34,6 @@
           <ScalarProperty Name="Codigo" ColumnName="Codigo" />
           <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
           <ScalarProperty Name="Estado" ColumnName="Estado" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Pago">
-      <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Pago">
-        <MappingFragment StoreEntitySet="Pago">
-          <ScalarProperty Name="Codigo" ColumnName="Codigo" />
-          <ScalarProperty Name="CodigoServicio" ColumnName="CodigoServicio" />
-          <ScalarProperty Name="CodigoCuenta" ColumnName="CodigoCuenta" />
-          <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
-          <ScalarProperty Name="Monto" ColumnName="Monto" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -116,6 +92,60 @@
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
           <ScalarProperty Name="Estado" ColumnName="Estado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CtaCredito">
+      <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.CtaCredito">
+        <MappingFragment StoreEntitySet="CtaCredito">
+          <ScalarProperty Name="Estado" ColumnName="Estado" />
+          <ScalarProperty Name="PagoContado" ColumnName="PagoContado" />
+          <ScalarProperty Name="PagoMinimo" ColumnName="PagoMinimo" />
+          <ScalarProperty Name="FechaPago" ColumnName="FechaPago" />
+          <ScalarProperty Name="Saldo" ColumnName="Saldo" />
+          <ScalarProperty Name="IBAN" ColumnName="IBAN" />
+          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+          <ScalarProperty Name="CodigoTarjeta" ColumnName="CodigoTarjeta" />
+          <ScalarProperty Name="CodigoMoneda" ColumnName="CodigoMoneda" />
+          <ScalarProperty Name="CodigoUsuario" ColumnName="CodigoUsuario" />
+          <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CtaDebito">
+      <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.CtaDebito">
+        <MappingFragment StoreEntitySet="CtaDebito">
+          <ScalarProperty Name="Estado" ColumnName="Estado" />
+          <ScalarProperty Name="Saldo" ColumnName="Saldo" />
+          <ScalarProperty Name="IBAN" ColumnName="IBAN" />
+          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+          <ScalarProperty Name="CodigoTarjeta" ColumnName="CodigoTarjeta" />
+          <ScalarProperty Name="CodigoMoneda" ColumnName="CodigoMoneda" />
+          <ScalarProperty Name="CodigoUsuario" ColumnName="CodigoUsuario" />
+          <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tarjeta">
+      <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Tarjeta">
+        <MappingFragment StoreEntitySet="Tarjeta">
+          <ScalarProperty Name="Estado" ColumnName="Estado" />
+          <ScalarProperty Name="FechaVencimiento" ColumnName="FechaVencimiento" />
+          <ScalarProperty Name="FechaEmision" ColumnName="FechaEmision" />
+          <ScalarProperty Name="Numero" ColumnName="Numero" />
+          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+          <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Pago">
+      <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Pago">
+        <MappingFragment StoreEntitySet="Pago">
+          <ScalarProperty Name="Monto" ColumnName="Monto" />
+          <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
+          <ScalarProperty Name="CodigoTarjeta" ColumnName="CodigoTarjeta" />
+          <ScalarProperty Name="CodigoServicio" ColumnName="CodigoServicio" />
+          <ScalarProperty Name="Codigo" ColumnName="Codigo" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

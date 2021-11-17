@@ -9,23 +9,23 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using API.Models;
+using System.Web.Http.Cors;
 
 namespace API.Controllers
 {
-
+    [AllowAnonymous]
+    [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
     public class UsuariosController : ApiController
     {
         private INTERNET_BANKING_DW1_3C2021Entities db = new INTERNET_BANKING_DW1_3C2021Entities();
 
         // GET: api/Usuarios
-        [Authorize]
         public IQueryable<Usuario> GetUsuario()
         {
             return db.Usuario;
         }
 
         // GET: api/Usuarios/5
-        [Authorize]
         [ResponseType(typeof(Usuario))]
         public IHttpActionResult GetUsuario(int id)
         {
@@ -39,7 +39,6 @@ namespace API.Controllers
         }
 
         // PUT: api/Usuarios/5
-        [Authorize]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutUsuario(int id, Usuario usuario)
         {
@@ -75,7 +74,6 @@ namespace API.Controllers
         }
 
         // POST: api/Usuarios
-        [AllowAnonymous]
         [ResponseType(typeof(Usuario))]
         public IHttpActionResult PostUsuario(Usuario usuario)
         {
@@ -91,7 +89,6 @@ namespace API.Controllers
         }
 
         // DELETE: api/Usuarios/5
-        [Authorize]
         [ResponseType(typeof(Usuario))]
         public IHttpActionResult DeleteUsuario(int id)
         {
