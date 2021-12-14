@@ -1,12 +1,5 @@
-import { AnnouncementCard, TodosCard } from 'components/Card';
-import HorizontalAvatarList from 'components/HorizontalAvatarList';
-import MapWithBubbles from 'components/MapWithBubbles';
 import Page from 'components/Page';
-import ProductMedia from 'components/ProductMedia';
-import SupportTicket from 'components/SupportTicket';
 import UserProgressTable from 'components/UserProgressTable';
-import { IconWidget, NumberWidget } from 'components/Widget';
-import { getStackLineChart, stackLineChartOptions } from 'demos/chartjs';
 import {
   avatarsData,
   chartjs,
@@ -15,8 +8,7 @@ import {
   todosData,
   userProgressTableData,
 } from 'demos/dashboardPage';
-import React from 'react';
-import { Bar, Line } from 'react-chartjs-2';
+import React, { useEffect } from 'react';
 import {
   MdBubbleChart,
   MdInsertChart,
@@ -44,366 +36,502 @@ import {
 } from 'reactstrap';
 import { getColor } from 'utils/colors';
 
-const today = new Date();
-const lastWeek = new Date(
-  today.getFullYear(),
-  today.getMonth(),
-  today.getDate() - 7,
-);
+import BarChart from '../components/ChartJS/BarChart';
+import DoughnutChart from '../components/ChartJS/DoughnutChart';
+import LineChart from '../components/ChartJS/LineChart';
+import PieChart from '../components/ChartJS/PieChart';
 
-class DashboardPage extends React.Component {
-  componentDidMount() {
+import { useMantenimientos } from '../hooks/useMantenimientos';
+
+const DashboardPage = () => {
+  const today = new Date();
+  const lastWeek = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() - 7,
+  );
+
+  const infoColor = getColor('info');
+  const secondaryColor = getColor('secondary');
+
+  const {
+    usePago,
+    useCharts,
+    useSesion,
+    useMoneda,
+    useUsuario,
+    useTarjeta,
+    useServicio,
+    useEstadistica,
+    useTransferencia,
+    useCuenta_Debito,
+    useCuenta_Credito,
+  } = useMantenimientos();
+  const { pagos } = usePago();
+  const { usuarios } = useUsuario();
+  const { servicios } = useServicio();
+  const { tarjetas } = useTarjeta();
+  const { transferencias } = useTransferencia();
+  const { estadisticas } = useEstadistica();
+  const { sesiones } = useSesion();
+  const { monedas } = useMoneda();
+  const { cuentas_debito } = useCuenta_Debito();
+  const { cuentas_credito } = useCuenta_Credito();
+
+  useEffect(() => {
     // this is needed, because InfiniteCalendar forces window scroll
     window.scrollTo(0, 0);
-  }
+  }, []);
 
-  render() {
-    const primaryColor = getColor('primary');
-    const secondaryColor = getColor('secondary');
+  //#region Graficos
 
-    return (
-      <Page
-        className="DashboardPage"
-        title="Dashboard"
-        //breadcrumbs={[{ name: 'Dashboard', active: true }]}
-      >
-        <Row>
-          <Col lg={3} md={6} sm={6} xs={12}>
-            <NumberWidget
-              title="Total Profit"
-              subtitle="This month"
-              number="9.8k"
-              color="secondary"
-              progress={{
-                value: 75,
-                label: 'Last month',
-              }}
-            />
-          </Col>
+  //#region Chart Pago
 
-          <Col lg={3} md={6} sm={6} xs={12}>
-            <NumberWidget
-              title="Monthly Visitors"
-              subtitle="This month"
-              number="5,400"
-              color="secondary"
-              progress={{
-                value: 45,
-                label: 'Last month',
-              }}
-            />
-          </Col>
+  const chartUsuarioData = () => {
+    const data = pagos.map(pago => pago.CodigoUsuario).sort((a, b) => a - b);
 
-          <Col lg={3} md={6} sm={6} xs={12}>
-            <NumberWidget
-              title="New Users"
-              subtitle="This month"
-              number="3,400"
-              color="secondary"
-              progress={{
-                value: 90,
-                label: 'Last month',
-              }}
-            />
-          </Col>
-
-          <Col lg={3} md={6} sm={6} xs={12}>
-            <NumberWidget
-              title="Bounce Rate"
-              subtitle="This month"
-              number="38%"
-              color="secondary"
-              progress={{
-                value: 60,
-                label: 'Last month',
-              }}
-            />
-          </Col>
-        </Row>
-
-        <Row>
-          <Col lg="8" md="12" sm="12" xs="12">
-            <Card>
-              <CardHeader>
-                Total Revenue{' '}
-                <small className="text-muted text-capitalize">This year</small>
-              </CardHeader>
-              <CardBody>
-                <Line data={chartjs.line.data} options={chartjs.line.options} />
-              </CardBody>
-            </Card>
-          </Col>
-
-          <Col lg="4" md="12" sm="12" xs="12">
-            <Card>
-              <CardHeader>Total Expense</CardHeader>
-              <CardBody>
-                <Bar data={chartjs.bar.data} options={chartjs.bar.options} />
-              </CardBody>
-              <ListGroup flush>
-                <ListGroupItem>
-                  <MdInsertChart size={25} color={primaryColor} /> Cost of sales{' '}
-                  <Badge color="secondary">$3000</Badge>
-                </ListGroupItem>
-                <ListGroupItem>
-                  <MdBubbleChart size={25} color={primaryColor} /> Management
-                  costs <Badge color="secondary">$1200</Badge>
-                </ListGroupItem>
-                <ListGroupItem>
-                  <MdShowChart size={25} color={primaryColor} /> Financial costs{' '}
-                  <Badge color="secondary">$800</Badge>
-                </ListGroupItem>
-                <ListGroupItem>
-                  <MdPieChart size={25} color={primaryColor} /> Other operating
-                  costs <Badge color="secondary">$2400</Badge>
-                </ListGroupItem>
-              </ListGroup>
-            </Card>
-          </Col>
-        </Row>
-
-        <CardGroup style={{ marginBottom: '1rem' }}>
-          <IconWidget
-            bgColor="white"
-            inverse={false}
-            icon={MdThumbUp}
-            title="50+ Likes"
-            subtitle="People you like"
-          />
-          <IconWidget
-            bgColor="white"
-            inverse={false}
-            icon={MdRateReview}
-            title="10+ Reviews"
-            subtitle="New Reviews"
-          />
-          <IconWidget
-            bgColor="white"
-            inverse={false}
-            icon={MdShare}
-            title="30+ Shares"
-            subtitle="New Shares"
-          />
-        </CardGroup>
-
-        <Row>
-          <Col md="6" sm="12" xs="12">
-            <Card>
-              <CardHeader>New Products</CardHeader>
-              <CardBody>
-                {productsData.map(
-                  ({ id, image, title, description, right }) => (
-                    <ProductMedia
-                      key={id}
-                      image={image}
-                      title={title}
-                      description={description}
-                      right={right}
-                    />
-                  ),
-                )}
-              </CardBody>
-            </Card>
-          </Col>
-
-          <Col md="6" sm="12" xs="12">
-            <Card>
-              <CardHeader>New Users</CardHeader>
-              <CardBody>
-                <UserProgressTable
-                  headers={[
-                    <MdPersonPin size={25} />,
-                    'name',
-                    'date',
-                    'participation',
-                    '%',
-                  ]}
-                  usersData={userProgressTableData}
-                />
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col lg={4} md={4} sm={12} xs={12}>
-            <Card>
-              <Line
-                data={getStackLineChart({
-                  labels: [
-                    'January',
-                    'February',
-                    'March',
-                    'April',
-                    'May',
-                    'June',
-                    'July',
-                  ],
-                  data: [0, 13000, 5000, 24000, 16000, 25000, 10000],
-                })}
-                options={stackLineChartOptions}
-              />
-              <CardBody
-                className="text-primary"
-                style={{ position: 'absolute' }}
-              >
-                <CardTitle>
-                  <MdInsertChart /> Sales
-                </CardTitle>
-              </CardBody>
-            </Card>
-          </Col>
-
-          <Col lg={4} md={4} sm={12} xs={12}>
-            <Card>
-              <Line
-                data={getStackLineChart({
-                  labels: [
-                    'January',
-                    'February',
-                    'March',
-                    'April',
-                    'May',
-                    'June',
-                    'July',
-                  ],
-                  data: [10000, 15000, 5000, 10000, 5000, 10000, 10000],
-                })}
-                options={stackLineChartOptions}
-              />
-              <CardBody
-                className="text-primary"
-                style={{ position: 'absolute' }}
-              >
-                <CardTitle>
-                  <MdInsertChart /> Revenue
-                </CardTitle>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg={4} md={4} sm={12} xs={12}>
-            <Card>
-              <Line
-                data={getStackLineChart({
-                  labels: [
-                    'January',
-                    'February',
-                    'March',
-                    'April',
-                    'May',
-                    'June',
-                    'July',
-                  ],
-                  data: [0, 13000, 5000, 24000, 16000, 25000, 10000].reverse(),
-                })}
-                options={stackLineChartOptions}
-              />
-              <CardBody
-                className="text-primary"
-                style={{ position: 'absolute', right: 0 }}
-              >
-                <CardTitle>
-                  <MdInsertChart /> Profit
-                </CardTitle>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col lg="4" md="12" sm="12" xs="12">
-            <InfiniteCalendar
-              selected={today}
-              minDate={lastWeek}
-              width="100%"
-              theme={{
-                accentColor: primaryColor,
-                floatingNav: {
-                  background: secondaryColor,
-                  chevron: primaryColor,
-                  color: '#FFF',
-                },
-                headerColor: primaryColor,
-                selectionColor: secondaryColor,
-                textColor: {
-                  active: '#FFF',
-                  default: '#333',
-                },
-                todayColor: secondaryColor,
-                weekdayColor: primaryColor,
-              }}
-            />
-          </Col>
-
-          <Col lg="8" md="12" sm="12" xs="12">
-            <Card inverse className="bg-gradient-primary">
-              <CardHeader className="bg-gradient-primary">
-                Map with bubbles
-              </CardHeader>
-              <CardBody>
-                <MapWithBubbles />
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-
-        <CardDeck style={{ marginBottom: '1rem' }}>
-          <Card body style={{ overflowX: 'auto','paddingBottom':'15px','height': 'fit-content','paddingTop': 'inherit'}}>
-            <HorizontalAvatarList
-              avatars={avatarsData}
-              avatarProps={{ size: 50 }}
-            />
-          </Card>
-
-          <Card body style={{ overflowX: 'auto','paddingBottom':'15px','height': 'fit-content','paddingTop': 'inherit'}}>
-            <HorizontalAvatarList
-              avatars={avatarsData}
-              avatarProps={{ size: 50 }}
-              reversed
-            />
-          </Card>
-        </CardDeck>
-
-        <Row>
-          <Col lg="4" md="12" sm="12" xs="12">
-            <AnnouncementCard
-              color="gradient-secondary"
-              header="Announcement"
-              avatarSize={60}
-              name="Jamy"
-              date="1 hour ago"
-              text="Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy euismod tinciduntut laoreet doloremagna"
-              buttonProps={{
-                children: 'show',
-              }}
-              style={{ height: 500 }}
-            />
-          </Col>
-
-          <Col lg="4" md="12" sm="12" xs="12">
-            <Card>
-              <CardHeader>
-                <div className="d-flex justify-content-between align-items-center">
-                  <span>Support Tickets</span>
-                  <Button>
-                    <small>View All</small>
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardBody>
-                {supportTicketsData.map(supportTicket => (
-                  <SupportTicket key={supportTicket.id} {...supportTicket} />
-                ))}
-              </CardBody>
-            </Card>
-          </Col>
-
-          <Col lg="4" md="12" sm="12" xs="12">
-            <TodosCard todos={todosData} />
-          </Col>
-        </Row>
-      </Page>
+    const filteredData = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
     );
-  }
-}
+
+    const labels = filteredData.map(pago =>
+      usuarios
+        .filter(usuario => usuario.Codigo === pago)
+        .map(usuario => usuario.Nombre),
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  const chartServicioData = () => {
+    const data = pagos.map(pago => pago.CodigoServicio).sort((a, b) => a - b);
+
+    const filteredData = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const labels = filteredData.map(pago =>
+      servicios
+        .filter(servicio => servicio.Codigo === pago)
+        .map(servicio => servicio.Descripcion),
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  //#endregion Chart Pago
+
+  //#region Chart Tarjeta
+
+  const chartUsuarioTarjetaData = () => {
+    const data = tarjetas
+      .map(tarjeta => tarjeta.CodigoUsuario)
+      .sort((a, b) => a - b);
+
+    const filteredData = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const labels = filteredData.map(tarjeta =>
+      usuarios
+        .filter(usuario => usuario.Codigo === tarjeta)
+        .map(usuario => usuario.Nombre),
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  const chartTarjetaData = () => {
+    const data = tarjetas
+      .map(tarjeta => tarjeta.Descripcion)
+      .sort((a, b) => a - b);
+
+    const labels = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  //#endregion Chart Tarjeta
+
+  //#region Chart Transferencia
+
+  const chartMontoData = () => {
+    const data = transferencias
+      .map(transferencia => transferencia.Monto)
+      .sort((a, b) => a - b);
+    const lineData = {
+      labels: data,
+      datasets: [
+        {
+          data: data,
+          backgroundColor: 'White',
+          borderColor: '#00c9ff',
+          fill: false,
+          tension: 0.1,
+        },
+      ],
+    };
+
+    return lineData;
+  };
+
+  //#endregion Chart Transferencia
+
+  //#region Chart Estadistica
+
+  const chartNavegadorData = () => {
+    const data = estadisticas
+      .map(sesion => sesion.Navegador)
+      .sort((a, b) => a - b);
+
+    const labels = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  const chartPlataformaData = () => {
+    const data = estadisticas
+      .map(sesion => sesion.PlataformaDispositivo)
+      .sort((a, b) => a - b);
+
+    const labels = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  const chartVistaData = () => {
+    const data = estadisticas.map(sesion => sesion.Vista).sort((a, b) => a - b);
+
+    const labels = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  const chartAccionData = () => {
+    const data = estadisticas
+      .map(sesion => sesion.Accion)
+      .sort((a, b) => a - b);
+
+    const labels = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  //#endregion Chart Estadistica
+
+  //#region Chart Sesion
+
+  const chartUsuarioSesionData = () => {
+    const data = sesiones
+      .map(sesion => sesion.CodigoUsuario)
+      .sort((a, b) => a - b);
+
+    const filteredData = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const labels = filteredData.map(sesion =>
+      usuarios
+        .filter(usuario => usuario.Codigo === sesion)
+        .map(usuario => usuario.Nombre),
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  //#endregion Chart Sesion
+
+  //#region Chart Cuenta Debito
+
+  const chartMonedaDebitoData = () => {
+    const data = cuentas_debito.map(cuenta_debito => cuenta_debito.CodigoMoneda).sort((a, b) => a - b);
+
+    const filteredData = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const labels = filteredData.map(cuenta_debito =>
+      monedas
+        .filter(moneda => moneda.Codigo === cuenta_debito)
+        .map(moneda => moneda.Descripcion),
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  const chartEstadoDebitoData = () => {
+    const data = cuentas_debito.map(cuenta_debito => cuenta_debito.Estado === 'A' ? "Activo" : "Inactivo").sort((a, b) => a - b);
+
+    const labels = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  //#endregion Chart Cuenta Debito
+
+  //#region Chart Cuenta Credito
+
+  const chartMonedaCreditoData = () => {
+    const data = cuentas_credito.map(cuenta_credito => cuenta_credito.CodigoMoneda).sort((a, b) => a - b);
+
+    const filteredData = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const labels = filteredData.map(cuenta_credito =>
+      monedas
+        .filter(moneda => moneda.Codigo === cuenta_credito)
+        .map(moneda => moneda.Descripcion),
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  const chartEstadoCreditoData = () => {
+    const data = cuentas_credito.map(cuenta_credito => cuenta_credito.Estado === 'A' ? "Activo" : "Inactivo").sort((a, b) => a - b);
+
+    const labels = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  const chartPagoCreditoData = () => {
+    const pagoMinimoData = cuentas_credito.map(cuenta_credito => cuenta_credito.PagoMinimo);
+    const pagoContadoData = cuentas_credito.map(cuenta_credito => cuenta_credito.PagoContado);
+    const lineData = {
+      labels: pagoMinimoData,
+      datasets: [
+        {
+          label: "Pago Minimo",
+          data: pagoMinimoData,
+          backgroundColor: "White",
+          borderColor: "#00c9ff",
+          fill: false,
+          tension: 0.1,
+        },
+        {
+          label: "Pago Contado",
+          data: pagoContadoData,
+          backgroundColor: "White",
+          borderColor: "#fc5c7d",
+          fill: false,
+          tension: 0.1,
+        },
+      ],
+    };
+
+    return lineData;
+  };
+
+  //#endregion Chart Cuenta Credito
+
+  //#endregion
+
+  return (
+    <Page className="DashboardPage" title="Dashboard">
+      <Row>
+        <Col md="4" sm="12" xs="12">
+          <InfiniteCalendar
+            selected={today}
+            minDate={lastWeek}
+            width="100%"
+            theme={{
+              accentColor: infoColor,
+              floatingNav: {
+                background: secondaryColor,
+                chevron: infoColor,
+                color: '#FFF',
+              },
+              headerColor: secondaryColor,
+              selectionColor: infoColor,
+              textColor: {
+                active: '#FFF',
+                default: '#333',
+              },
+              todayColor: infoColor,
+              weekdayColor: secondaryColor,
+            }}
+          />
+        </Col>
+        <Col md="8" sm="12" xs="12">
+          <Card>
+            <CardHeader>Usuarios</CardHeader>
+            <CardBody>
+              <UserProgressTable
+                headers={[
+                  <MdPersonPin size={25} />,
+                  'name',
+                  'date',
+                  'participation',
+                  '%',
+                ]}
+                usersData={userProgressTableData}
+              />
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+
+      <Page className="DashboardPage" title="Gráficos - ChartJS">
+        <Card>
+          <CardBody>
+            <Row>
+              <Col>
+                <DoughnutChart
+                  title="Estadísticas"
+                  descripcion="Navegador más usado"
+                  data={chartNavegadorData}
+                />
+              </Col>
+              <Col>
+                <DoughnutChart
+                  title="Estadísticas"
+                  descripcion="Plataforma más usada"
+                  data={chartPlataformaData}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <DoughnutChart
+                  title="Estadísticas"
+                  descripcion="Vista más ingresada"
+                  data={chartVistaData}
+                />
+              </Col>
+              <Col>
+                <DoughnutChart
+                  title="Estadísticas"
+                  descripcion="Acción más realizada"
+                  data={chartAccionData}
+                />
+              </Col>
+            </Row>
+
+            <Row>
+              <DoughnutChart
+                title="Sesiones"
+                descripcion="Usuarios más frecuentes"
+                data={chartUsuarioSesionData}
+              />
+            </Row>
+
+            <Row>
+              <Col>
+                <BarChart
+                  title="Pagos"
+                  descripcion="Usuarios más frecuentes"
+                  data={chartUsuarioData}
+                />
+              </Col>
+              <Col>
+                <BarChart
+                  title="Pagos"
+                  descripcion="Servicios más pagados"
+                  data={chartServicioData}
+                />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <PieChart
+                  title="Tarjetas"
+                  descripcion="Usuarios con más tarjetas"
+                  data={chartUsuarioTarjetaData}
+                />
+              </Col>
+              <Col>
+                <PieChart
+                  title="Tarjetas"
+                  descripcion="Tipo de tarjeta más utilizada"
+                  data={chartTarjetaData}
+                />
+              </Col>
+            </Row>
+
+            <Row>
+              <LineChart
+                title="Transferencias"
+                descripcion="Comparativa de montos transferidos entre cuentas"
+                data={chartMontoData}
+              />
+            </Row>
+
+            <Row>
+                <Col>
+                  <BarChart
+                    title="Cuentas Debito"
+                    descripcion="Monedas más usadas en cuentas debito"
+                    data={chartMonedaDebitoData}
+                  />
+                </Col>
+                <Col>
+                  <BarChart
+                    title="Cuentas Debito"
+                    descripcion="Estado de las cuentas debito"
+                    data={chartEstadoDebitoData}
+                  />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <BarChart
+                    title="Cuentas Credito"
+                    descripcion="Monedas más usadas en cuentas credito"
+                    data={chartMonedaCreditoData}
+                  />
+                </Col>
+                <Col>
+                  <BarChart
+                    title="Cuentas Credito"
+                    descripcion="Estado de las cuentas credito"
+                    data={chartEstadoCreditoData}
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <LineChart
+                    title="Cuentas Credito"
+                    descripcion="Comparativa entre pago mínimo y contado"
+                    data={chartPagoCreditoData}
+                  />
+                </Col>
+              </Row>
+          </CardBody>
+        </Card>
+      </Page>
+    </Page>
+  );
+};
+
 export default DashboardPage;

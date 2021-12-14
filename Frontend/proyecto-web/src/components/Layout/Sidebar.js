@@ -10,7 +10,7 @@ import {
   MdBrush,
   MdChromeReaderMode,
   MdDashboard,
-  MdExtension,
+  MdAddchart,
   MdGroupWork,
   MdInsertChart,
   MdKeyboardArrowDown,
@@ -24,7 +24,18 @@ import {
   MdViewDay,
   MdViewList,
   MdWeb,
-  MdWidgets,
+  MdMiscellaneousServices,
+  MdOutlineAttachMoney,
+  MdPayment,
+  MdCreditCard,
+  MdOutlineAssignment,
+  MdAccountBox,
+  MdOutlineAccountBox,
+  MdPayments,
+  MdQueryStats,
+  MdAssessment,
+  MdOutlineApps,
+  MdCached
 } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
 import {
@@ -86,17 +97,31 @@ const navItems = [
   { to: '/widgets', name: 'widgets', exact: false, Icon: MdWidgets },*/
 ];
 
-const navMantenimientos = [
-  { to: '/tarjetas', name: 'Tarjetas', exact: false, Icon: MdBorderAll },
-  { to: '/CtaDebitoes', name: 'Cuentas Debito', exact: false, Icon: MdBorderAll },
-  { to: '/CtaCreditoes', name: 'Cuentas Credito', exact: false, Icon: MdBorderAll },
+const navServicios = [
+  { to: '/pagos', name: 'Pagos', exact: false, Icon: MdPayments },
+  { to: '/monedas', name: 'Monedas', exact: false, Icon: MdOutlineAttachMoney },
+  { to: '/servicios', name: 'Servicios', exact: false, Icon: MdMiscellaneousServices },
+];
+
+const navMovimientos = [
+  { to: '/tarjetas', name: 'Tarjetas', exact: false, Icon: MdCreditCard },
+  { to: '/transferencias', name: 'Transferencias', exact: false, Icon: MdOutlineAssignment },
+  { to: '/cuentas_debito', name: 'Cuentas Debito', exact: false, Icon: MdAccountBox },
+  { to: '/cuentas_credito', name: 'Cuentas Credito', exact: false, Icon: MdOutlineAccountBox },
+];
+
+const navEstadisticas = [
+  { to: '/sesiones', name: 'Sesiones', exact: false, Icon: MdQueryStats },
+  { to: '/estadisticas', name: 'Estadisticas', exact: false, Icon: MdAssessment },
 ];
 
 const bem = bn.create('sidebar');
 
 class Sidebar extends React.Component {
   state = {
-    isOpenComponents: true,
+    isOpenServicios: true,
+    isOpenMovimientos: true,
+    isOpenEstadisticas: true,
     isOpenContents: true,
     isOpenPages: true,
   };
@@ -126,7 +151,8 @@ class Sidebar extends React.Component {
                 alt=""
               />
               <span className="text-white">
-                Internet Banking <FaGithub />
+              Evil Corp
+                {/* Evil Corp IB <FaGithub /> */}
               </span>
             </SourceLink>
           </Navbar>
@@ -150,18 +176,18 @@ class Sidebar extends React.Component {
 
             <NavItem
               className={bem.e('nav-item')}
-              onClick={this.handleClick('Components')}
+              onClick={this.handleClick('Servicios')}
             >
               <BSNavLink className={bem.e('nav-item-collapse')}>
                 <div className="d-flex">
-                  <MdExtension className={bem.e('nav-item-icon')} />
-                  <span className=" align-self-start">Mantenimientos</span>
+                  <MdOutlineApps className={bem.e('nav-item-icon')} />
+                  <span className=" align-self-start">Servicios</span>
                 </div>
                 <MdKeyboardArrowDown
                   className={bem.e('nav-item-icon')}
                   style={{
                     padding: 0,
-                    transform: this.state.isOpenComponents
+                    transform: this.state.isOpenServicios
                       ? 'rotate(0deg)'
                       : 'rotate(-90deg)',
                     transitionDuration: '0.3s',
@@ -170,8 +196,8 @@ class Sidebar extends React.Component {
                 />
               </BSNavLink>
             </NavItem>
-            <Collapse isOpen={this.state.isOpenComponents}>
-              {navMantenimientos.map(({ to, name, exact, Icon }, index) => (
+            <Collapse isOpen={this.state.isOpenServicios}>
+              {navServicios.map(({ to, name, exact, Icon }, index) => (
                 <NavItem key={index} className={bem.e('nav-item')}>
                   <BSNavLink
                     id={`navItem-${name}-${index}`}
@@ -188,6 +214,85 @@ class Sidebar extends React.Component {
               ))}
             </Collapse>
 
+            <NavItem
+              className={bem.e('nav-item')}
+              onClick={this.handleClick('Movimientos')}
+            >
+              <BSNavLink className={bem.e('nav-item-collapse')}>
+                <div className="d-flex">
+                  <MdCached className={bem.e('nav-item-icon')} />
+                  <span className=" align-self-start">Movimientos</span>
+                </div>
+                <MdKeyboardArrowDown
+                  className={bem.e('nav-item-icon')}
+                  style={{
+                    padding: 0,
+                    transform: this.state.isOpenMovimientos
+                      ? 'rotate(0deg)'
+                      : 'rotate(-90deg)',
+                    transitionDuration: '0.3s',
+                    transitionProperty: 'transform',
+                  }}
+                />
+              </BSNavLink>
+            </NavItem>
+            <Collapse isOpen={this.state.isOpenMovimientos}>
+              {navMovimientos.map(({ to, name, exact, Icon }, index) => (
+                <NavItem key={index} className={bem.e('nav-item')}>
+                  <BSNavLink
+                    id={`navItem-${name}-${index}`}
+                    className="text-uppercase"
+                    tag={NavLink}
+                    to={to}
+                    activeClassName="active"
+                    exact={exact}
+                  >
+                    <Icon className={bem.e('nav-item-icon')} />
+                    <span className="">{name}</span>
+                  </BSNavLink>
+                </NavItem>
+              ))}
+            </Collapse>
+
+            <NavItem
+              className={bem.e('nav-item')}
+              onClick={this.handleClick('Estadisticas')}
+            >
+              <BSNavLink className={bem.e('nav-item-collapse')}>
+                <div className="d-flex">
+                  <MdAddchart className={bem.e('nav-item-icon')} />
+                  <span className=" align-self-start">Estadisticas</span>
+                </div>
+                <MdKeyboardArrowDown
+                  className={bem.e('nav-item-icon')}
+                  style={{
+                    padding: 0,
+                    transform: this.state.isOpenEstadisticas
+                      ? 'rotate(0deg)'
+                      : 'rotate(-90deg)',
+                    transitionDuration: '0.3s',
+                    transitionProperty: 'transform',
+                  }}
+                />
+              </BSNavLink>
+            </NavItem>
+            <Collapse isOpen={this.state.isOpenEstadisticas}>
+              {navEstadisticas.map(({ to, name, exact, Icon }, index) => (
+                <NavItem key={index} className={bem.e('nav-item')}>
+                  <BSNavLink
+                    id={`navItem-${name}-${index}`}
+                    className="text-uppercase"
+                    tag={NavLink}
+                    to={to}
+                    activeClassName="active"
+                    exact={exact}
+                  >
+                    <Icon className={bem.e('nav-item-icon')} />
+                    <span className="">{name}</span>
+                  </BSNavLink>
+                </NavItem>
+              ))}
+            </Collapse>
 
             {/* <NavItem
               className={bem.e('nav-item')}

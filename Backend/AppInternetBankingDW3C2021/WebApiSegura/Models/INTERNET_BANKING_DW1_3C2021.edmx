@@ -1,0 +1,908 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="INTERNET_BANKING_DW1_3C2021Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cuenta_Credito">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoUsuario" Type="int" Nullable="false" />
+          <Property Name="CodigoMoneda" Type="int" Nullable="false" />
+          <Property Name="CodigoTarjeta" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IBAN" Type="varchar" MaxLength="22" Nullable="false" />
+          <Property Name="Saldo" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="FechaPago" Type="datetime" Nullable="false" />
+          <Property Name="PagoMinimo" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="PagoContado" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Estado" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cuenta_Debito">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoUsuario" Type="int" Nullable="false" />
+          <Property Name="CodigoMoneda" Type="int" Nullable="false" />
+          <Property Name="CodigoTarjeta" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IBAN" Type="varchar" MaxLength="22" Nullable="false" />
+          <Property Name="Saldo" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Estado" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Error">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoUsuario" Type="int" Nullable="false" />
+          <Property Name="FechaHora" Type="datetime" Nullable="false" />
+          <Property Name="Fuente" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Numero" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="Accion" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Estadistica">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoUsuario" Type="int" Nullable="false" />
+          <Property Name="FechaHora" Type="datetime" Nullable="false" />
+          <Property Name="Navegador" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PlataformaDispositivo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FabricanteDispositivo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Vista" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Accion" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Moneda">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Estado" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pago">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoUsuario" Type="int" Nullable="false" />
+          <Property Name="CodigoServicio" Type="int" Nullable="false" />
+          <Property Name="CodigoTarjeta" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Fechahora" Type="datetime" Nullable="false" />
+          <Property Name="Monto" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Servicio">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Estado" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sesion">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoUsuario" Type="int" Nullable="false" />
+          <Property Name="FechaInicio" Type="datetime" Nullable="false" />
+          <Property Name="FechaExpiracion" Type="datetime" Nullable="false" />
+          <Property Name="Estado" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tarjeta">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoUsuario" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Numero" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CVC" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="FechaVencimiento" Type="datetime" Nullable="false" />
+          <Property Name="Estado" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transferencia">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CuentaOrigen" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CuentaDestino" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FechaHora" Type="datetime" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Monto" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Estado" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Identificacion" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FechaNacimiento" Type="datetime" Nullable="false" />
+          <Property Name="Estado" Type="char" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Cuenta_Credito_Moneda">
+          <End Role="Moneda" Type="Self.Moneda" Multiplicity="1" />
+          <End Role="Cuenta_Credito" Type="Self.Cuenta_Credito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Moneda">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Cuenta_Credito">
+              <PropertyRef Name="CodigoMoneda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuenta_Credito_Tarjeta">
+          <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="1" />
+          <End Role="Cuenta_Credito" Type="Self.Cuenta_Credito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tarjeta">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Cuenta_Credito">
+              <PropertyRef Name="CodigoTarjeta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuenta_Credito_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Cuenta_Credito" Type="Self.Cuenta_Credito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Cuenta_Credito">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuenta_Debito_Moneda">
+          <End Role="Moneda" Type="Self.Moneda" Multiplicity="1" />
+          <End Role="Cuenta_Debito" Type="Self.Cuenta_Debito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Moneda">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Cuenta_Debito">
+              <PropertyRef Name="CodigoMoneda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuenta_Debito_Tarjeta">
+          <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="1" />
+          <End Role="Cuenta_Debito" Type="Self.Cuenta_Debito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tarjeta">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Cuenta_Debito">
+              <PropertyRef Name="CodigoTarjeta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuenta_Debito_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Cuenta_Debito" Type="Self.Cuenta_Debito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Cuenta_Debito">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Error_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Error" Type="Self.Error" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Error">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Estadistica_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Estadistica" Type="Self.Estadistica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Estadistica">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pago_Servicio">
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
+          <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicio">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Pago">
+              <PropertyRef Name="CodigoServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pago_Tarjeta">
+          <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="1" />
+          <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tarjeta">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Pago">
+              <PropertyRef Name="CodigoTarjeta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pago_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Pago">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sesion_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Sesion" Type="Self.Sesion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Sesion">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tarjeta_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Tarjeta">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="INTERNET_BANKING_DW1_3C2021ModelStoreContainer">
+          <EntitySet Name="Cuenta_Credito" EntityType="Self.Cuenta_Credito" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cuenta_Debito" EntityType="Self.Cuenta_Debito" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Error" EntityType="Self.Error" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Estadistica" EntityType="Self.Estadistica" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Moneda" EntityType="Self.Moneda" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pago" EntityType="Self.Pago" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Servicio" EntityType="Self.Servicio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sesion" EntityType="Self.Sesion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tarjeta" EntityType="Self.Tarjeta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transferencia" EntityType="Self.Transferencia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Cuenta_Credito_Moneda" Association="Self.FK_Cuenta_Credito_Moneda">
+            <End Role="Moneda" EntitySet="Moneda" />
+            <End Role="Cuenta_Credito" EntitySet="Cuenta_Credito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuenta_Credito_Tarjeta" Association="Self.FK_Cuenta_Credito_Tarjeta">
+            <End Role="Tarjeta" EntitySet="Tarjeta" />
+            <End Role="Cuenta_Credito" EntitySet="Cuenta_Credito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuenta_Credito_Usuario" Association="Self.FK_Cuenta_Credito_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Cuenta_Credito" EntitySet="Cuenta_Credito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuenta_Debito_Moneda" Association="Self.FK_Cuenta_Debito_Moneda">
+            <End Role="Moneda" EntitySet="Moneda" />
+            <End Role="Cuenta_Debito" EntitySet="Cuenta_Debito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuenta_Debito_Tarjeta" Association="Self.FK_Cuenta_Debito_Tarjeta">
+            <End Role="Tarjeta" EntitySet="Tarjeta" />
+            <End Role="Cuenta_Debito" EntitySet="Cuenta_Debito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuenta_Debito_Usuario" Association="Self.FK_Cuenta_Debito_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Cuenta_Debito" EntitySet="Cuenta_Debito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Error_Usuario" Association="Self.FK_Error_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Error" EntitySet="Error" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Estadistica_Usuario" Association="Self.FK_Estadistica_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Estadistica" EntitySet="Estadistica" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pago_Servicio" Association="Self.FK_Pago_Servicio">
+            <End Role="Servicio" EntitySet="Servicio" />
+            <End Role="Pago" EntitySet="Pago" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pago_Tarjeta" Association="Self.FK_Pago_Tarjeta">
+            <End Role="Tarjeta" EntitySet="Tarjeta" />
+            <End Role="Pago" EntitySet="Pago" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pago_Usuario" Association="Self.FK_Pago_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Pago" EntitySet="Pago" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sesion_Usuario" Association="Self.FK_Sesion_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Sesion" EntitySet="Sesion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tarjeta_Usuario" Association="Self.FK_Tarjeta_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Tarjeta" EntitySet="Tarjeta" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="INTERNET_BANKING_DW1_3C2021Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cuenta_Credito">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoUsuario" Type="Int32" Nullable="false" />
+          <Property Name="CodigoMoneda" Type="Int32" Nullable="false" />
+          <Property Name="CodigoTarjeta" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IBAN" Type="String" MaxLength="22" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Saldo" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="FechaPago" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PagoMinimo" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="PagoContado" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Moneda" Relationship="Self.FK_Cuenta_Credito_Moneda" FromRole="Cuenta_Credito" ToRole="Moneda" />
+          <NavigationProperty Name="Tarjeta" Relationship="Self.FK_Cuenta_Credito_Tarjeta" FromRole="Cuenta_Credito" ToRole="Tarjeta" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Cuenta_Credito_Usuario" FromRole="Cuenta_Credito" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Cuenta_Debito">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoUsuario" Type="Int32" Nullable="false" />
+          <Property Name="CodigoMoneda" Type="Int32" Nullable="false" />
+          <Property Name="CodigoTarjeta" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IBAN" Type="String" MaxLength="22" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Saldo" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Moneda" Relationship="Self.FK_Cuenta_Debito_Moneda" FromRole="Cuenta_Debito" ToRole="Moneda" />
+          <NavigationProperty Name="Tarjeta" Relationship="Self.FK_Cuenta_Debito_Tarjeta" FromRole="Cuenta_Debito" ToRole="Tarjeta" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Cuenta_Debito_Usuario" FromRole="Cuenta_Debito" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Error">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoUsuario" Type="Int32" Nullable="false" />
+          <Property Name="FechaHora" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Fuente" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Numero" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Accion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Error_Usuario" FromRole="Error" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Estadistica">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoUsuario" Type="Int32" Nullable="false" />
+          <Property Name="FechaHora" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Navegador" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PlataformaDispositivo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FabricanteDispositivo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Vista" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Accion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Estadistica_Usuario" FromRole="Estadistica" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Moneda">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Cuenta_Credito" Relationship="Self.FK_Cuenta_Credito_Moneda" FromRole="Moneda" ToRole="Cuenta_Credito" />
+          <NavigationProperty Name="Cuenta_Debito" Relationship="Self.FK_Cuenta_Debito_Moneda" FromRole="Moneda" ToRole="Cuenta_Debito" />
+        </EntityType>
+        <EntityType Name="Pago">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoUsuario" Type="Int32" Nullable="false" />
+          <Property Name="CodigoServicio" Type="Int32" Nullable="false" />
+          <Property Name="CodigoTarjeta" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Fechahora" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Monto" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Servicio" Relationship="Self.FK_Pago_Servicio" FromRole="Pago" ToRole="Servicio" />
+          <NavigationProperty Name="Tarjeta" Relationship="Self.FK_Pago_Tarjeta" FromRole="Pago" ToRole="Tarjeta" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Pago_Usuario" FromRole="Pago" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Servicio">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Pagoes" Relationship="Self.FK_Pago_Servicio" FromRole="Servicio" ToRole="Pago" />
+        </EntityType>
+        <EntityType Name="Sesion">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoUsuario" Type="Int32" Nullable="false" />
+          <Property Name="FechaInicio" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechaExpiracion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Sesion_Usuario" FromRole="Sesion" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Tarjeta">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoUsuario" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Numero" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CVC" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaVencimiento" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Cuenta_Credito" Relationship="Self.FK_Cuenta_Credito_Tarjeta" FromRole="Tarjeta" ToRole="Cuenta_Credito" />
+          <NavigationProperty Name="Cuenta_Debito" Relationship="Self.FK_Cuenta_Debito_Tarjeta" FromRole="Tarjeta" ToRole="Cuenta_Debito" />
+          <NavigationProperty Name="Pagoes" Relationship="Self.FK_Pago_Tarjeta" FromRole="Tarjeta" ToRole="Pago" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Tarjeta_Usuario" FromRole="Tarjeta" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Transferencia">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CuentaOrigen" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CuentaDestino" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaHora" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Monto" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Identificacion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FechaNacimiento" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Estado" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Cuenta_Credito" Relationship="Self.FK_Cuenta_Credito_Usuario" FromRole="Usuario" ToRole="Cuenta_Credito" />
+          <NavigationProperty Name="Cuenta_Debito" Relationship="Self.FK_Cuenta_Debito_Usuario" FromRole="Usuario" ToRole="Cuenta_Debito" />
+          <NavigationProperty Name="Errors" Relationship="Self.FK_Error_Usuario" FromRole="Usuario" ToRole="Error" />
+          <NavigationProperty Name="Estadisticas" Relationship="Self.FK_Estadistica_Usuario" FromRole="Usuario" ToRole="Estadistica" />
+          <NavigationProperty Name="Pagoes" Relationship="Self.FK_Pago_Usuario" FromRole="Usuario" ToRole="Pago" />
+          <NavigationProperty Name="Sesions" Relationship="Self.FK_Sesion_Usuario" FromRole="Usuario" ToRole="Sesion" />
+          <NavigationProperty Name="Tarjetas" Relationship="Self.FK_Tarjeta_Usuario" FromRole="Usuario" ToRole="Tarjeta" />
+        </EntityType>
+        <Association Name="FK_Cuenta_Credito_Moneda">
+          <End Role="Moneda" Type="Self.Moneda" Multiplicity="1" />
+          <End Role="Cuenta_Credito" Type="Self.Cuenta_Credito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Moneda">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Cuenta_Credito">
+              <PropertyRef Name="CodigoMoneda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuenta_Credito_Tarjeta">
+          <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="1" />
+          <End Role="Cuenta_Credito" Type="Self.Cuenta_Credito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tarjeta">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Cuenta_Credito">
+              <PropertyRef Name="CodigoTarjeta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuenta_Credito_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Cuenta_Credito" Type="Self.Cuenta_Credito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Cuenta_Credito">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuenta_Debito_Moneda">
+          <End Role="Moneda" Type="Self.Moneda" Multiplicity="1" />
+          <End Role="Cuenta_Debito" Type="Self.Cuenta_Debito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Moneda">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Cuenta_Debito">
+              <PropertyRef Name="CodigoMoneda" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuenta_Debito_Tarjeta">
+          <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="1" />
+          <End Role="Cuenta_Debito" Type="Self.Cuenta_Debito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tarjeta">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Cuenta_Debito">
+              <PropertyRef Name="CodigoTarjeta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuenta_Debito_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Cuenta_Debito" Type="Self.Cuenta_Debito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Cuenta_Debito">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Error_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Error" Type="Self.Error" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Error">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Estadistica_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Estadistica" Type="Self.Estadistica" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Estadistica">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pago_Servicio">
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
+          <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicio">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Pago">
+              <PropertyRef Name="CodigoServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pago_Tarjeta">
+          <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="1" />
+          <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tarjeta">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Pago">
+              <PropertyRef Name="CodigoTarjeta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pago_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Pago">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sesion_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Sesion" Type="Self.Sesion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Sesion">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tarjeta_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Tarjeta">
+              <PropertyRef Name="CodigoUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="INTERNET_BANKING_DW1_3C2021Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cuenta_Credito" EntityType="Self.Cuenta_Credito" />
+          <EntitySet Name="Cuenta_Debito" EntityType="Self.Cuenta_Debito" />
+          <EntitySet Name="Errors" EntityType="Self.Error" />
+          <EntitySet Name="Estadisticas" EntityType="Self.Estadistica" />
+          <EntitySet Name="Monedas" EntityType="Self.Moneda" />
+          <EntitySet Name="Pagoes" EntityType="Self.Pago" />
+          <EntitySet Name="Servicios" EntityType="Self.Servicio" />
+          <EntitySet Name="Sesions" EntityType="Self.Sesion" />
+          <EntitySet Name="Tarjetas" EntityType="Self.Tarjeta" />
+          <EntitySet Name="Transferencias" EntityType="Self.Transferencia" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuario" />
+          <AssociationSet Name="FK_Cuenta_Credito_Moneda" Association="Self.FK_Cuenta_Credito_Moneda">
+            <End Role="Moneda" EntitySet="Monedas" />
+            <End Role="Cuenta_Credito" EntitySet="Cuenta_Credito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuenta_Credito_Tarjeta" Association="Self.FK_Cuenta_Credito_Tarjeta">
+            <End Role="Tarjeta" EntitySet="Tarjetas" />
+            <End Role="Cuenta_Credito" EntitySet="Cuenta_Credito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuenta_Credito_Usuario" Association="Self.FK_Cuenta_Credito_Usuario">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Cuenta_Credito" EntitySet="Cuenta_Credito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuenta_Debito_Moneda" Association="Self.FK_Cuenta_Debito_Moneda">
+            <End Role="Moneda" EntitySet="Monedas" />
+            <End Role="Cuenta_Debito" EntitySet="Cuenta_Debito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuenta_Debito_Tarjeta" Association="Self.FK_Cuenta_Debito_Tarjeta">
+            <End Role="Tarjeta" EntitySet="Tarjetas" />
+            <End Role="Cuenta_Debito" EntitySet="Cuenta_Debito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuenta_Debito_Usuario" Association="Self.FK_Cuenta_Debito_Usuario">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Cuenta_Debito" EntitySet="Cuenta_Debito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Error_Usuario" Association="Self.FK_Error_Usuario">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Error" EntitySet="Errors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Estadistica_Usuario" Association="Self.FK_Estadistica_Usuario">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Estadistica" EntitySet="Estadisticas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pago_Servicio" Association="Self.FK_Pago_Servicio">
+            <End Role="Servicio" EntitySet="Servicios" />
+            <End Role="Pago" EntitySet="Pagoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pago_Tarjeta" Association="Self.FK_Pago_Tarjeta">
+            <End Role="Tarjeta" EntitySet="Tarjetas" />
+            <End Role="Pago" EntitySet="Pagoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pago_Usuario" Association="Self.FK_Pago_Usuario">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Pago" EntitySet="Pagoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sesion_Usuario" Association="Self.FK_Sesion_Usuario">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Sesion" EntitySet="Sesions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tarjeta_Usuario" Association="Self.FK_Tarjeta_Usuario">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Tarjeta" EntitySet="Tarjetas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="INTERNET_BANKING_DW1_3C2021ModelStoreContainer" CdmEntityContainer="INTERNET_BANKING_DW1_3C2021Entities">
+          <EntitySetMapping Name="Cuenta_Credito">
+            <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Cuenta_Credito">
+              <MappingFragment StoreEntitySet="Cuenta_Credito">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="CodigoUsuario" ColumnName="CodigoUsuario" />
+                <ScalarProperty Name="CodigoMoneda" ColumnName="CodigoMoneda" />
+                <ScalarProperty Name="CodigoTarjeta" ColumnName="CodigoTarjeta" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IBAN" ColumnName="IBAN" />
+                <ScalarProperty Name="Saldo" ColumnName="Saldo" />
+                <ScalarProperty Name="FechaPago" ColumnName="FechaPago" />
+                <ScalarProperty Name="PagoMinimo" ColumnName="PagoMinimo" />
+                <ScalarProperty Name="PagoContado" ColumnName="PagoContado" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cuenta_Debito">
+            <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Cuenta_Debito">
+              <MappingFragment StoreEntitySet="Cuenta_Debito">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="CodigoUsuario" ColumnName="CodigoUsuario" />
+                <ScalarProperty Name="CodigoMoneda" ColumnName="CodigoMoneda" />
+                <ScalarProperty Name="CodigoTarjeta" ColumnName="CodigoTarjeta" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IBAN" ColumnName="IBAN" />
+                <ScalarProperty Name="Saldo" ColumnName="Saldo" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Errors">
+            <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Error">
+              <MappingFragment StoreEntitySet="Error">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="CodigoUsuario" ColumnName="CodigoUsuario" />
+                <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
+                <ScalarProperty Name="Fuente" ColumnName="Fuente" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Accion" ColumnName="Accion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Estadisticas">
+            <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Estadistica">
+              <MappingFragment StoreEntitySet="Estadistica">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="CodigoUsuario" ColumnName="CodigoUsuario" />
+                <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
+                <ScalarProperty Name="Navegador" ColumnName="Navegador" />
+                <ScalarProperty Name="PlataformaDispositivo" ColumnName="PlataformaDispositivo" />
+                <ScalarProperty Name="FabricanteDispositivo" ColumnName="FabricanteDispositivo" />
+                <ScalarProperty Name="Vista" ColumnName="Vista" />
+                <ScalarProperty Name="Accion" ColumnName="Accion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Monedas">
+            <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Moneda">
+              <MappingFragment StoreEntitySet="Moneda">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pagoes">
+            <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Pago">
+              <MappingFragment StoreEntitySet="Pago">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="CodigoUsuario" ColumnName="CodigoUsuario" />
+                <ScalarProperty Name="CodigoServicio" ColumnName="CodigoServicio" />
+                <ScalarProperty Name="CodigoTarjeta" ColumnName="CodigoTarjeta" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Fechahora" ColumnName="Fechahora" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Servicios">
+            <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Servicio">
+              <MappingFragment StoreEntitySet="Servicio">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sesions">
+            <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Sesion">
+              <MappingFragment StoreEntitySet="Sesion">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="CodigoUsuario" ColumnName="CodigoUsuario" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="FechaExpiracion" ColumnName="FechaExpiracion" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tarjetas">
+            <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Tarjeta">
+              <MappingFragment StoreEntitySet="Tarjeta">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="CodigoUsuario" ColumnName="CodigoUsuario" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="CVC" ColumnName="CVC" />
+                <ScalarProperty Name="FechaVencimiento" ColumnName="FechaVencimiento" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transferencias">
+            <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Transferencia">
+              <MappingFragment StoreEntitySet="Transferencia">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="CuentaOrigen" ColumnName="CuentaOrigen" />
+                <ScalarProperty Name="CuentaDestino" ColumnName="CuentaDestino" />
+                <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="INTERNET_BANKING_DW1_3C2021Model.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Identificacion" ColumnName="Identificacion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

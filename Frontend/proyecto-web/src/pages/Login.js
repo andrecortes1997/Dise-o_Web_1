@@ -1,14 +1,26 @@
 import E_Corp from 'assets/img/logo/E_Corp.PNG';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Row, Col, Card, Button, Form, FormGroup, Input, Label } from 'reactstrap';
+import {
+  Row,
+  Col,
+  Card,
+  Button,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap';
 import Swal from 'sweetalert2';
 import { logIn } from '../services/Login';
-import { Redirect } from 'react-router-dom';
 
-const AuthForm = props => {
-  const [isAuth, setIsAuth] = useState(false);
+//import { useMantenimientos } from '../hooks/useMantenimientos';
+
+const Login = props => {
   const [loginForm, setLoginForm] = useState({ Username: '', Password: '' });
+  //const { useSesion, useEstadistica } = useMantenimientos();
+  //const { postEstadistica } = useEstadistica();
+  //const { postSesion } = useSesion();
 
   const {
     showLogo,
@@ -17,7 +29,6 @@ const AuthForm = props => {
     passwordLabel,
     passwordInputProps,
     children,
-    onLogoClick,
   } = props;
 
   const handleSubmit = event => {
@@ -51,12 +62,12 @@ const AuthForm = props => {
       .then(response => {
         const { data, status } = response;
         if (status === 200) {
-          const { Token, Nombre, Codigo } = data;
-          const name = Nombre.split(' ');
+          const { Token, Codigo } = data;
           localStorage.setItem('token', Token);
-          localStorage.setItem('name', name[0]);
           localStorage.setItem('Codigo', Codigo);
-          setIsAuth(true);
+          //postEstadistica(Codigo,'Login', 'Iniciar Sesion')
+          //postSesion(Codigo);
+          props.history.push('/login');
         }
       })
       .catch(() => handleLoginErrors(2));
@@ -90,7 +101,6 @@ const AuthForm = props => {
                   className="rounded"
                   style={{ width: 60, height: 60, cursor: 'pointer' }}
                   alt="logo"
-                  onClick={onLogoClick}
                 />
               </div>
             )}
@@ -106,14 +116,6 @@ const AuthForm = props => {
               </FormGroup>
             </>
 
-            {/*<FormGroup check>
-          <Label check>
-            <Input type="checkbox" />{' '}
-            {isSignup ? 'Agree the terms and policy' : 'Remember me'}
-          </Label>
-        </FormGroup> 
-        <hr />*/}
-
             <Button
               size="lg"
               className="bg-gradient-theme-left border-0"
@@ -121,15 +123,12 @@ const AuthForm = props => {
               onClick={handleLogIn}
             >
               Login
-              {isAuth && <Redirect to="/" />}
             </Button>
 
             <div className="text-center pt-1">
               <h6>o</h6>
               <h6>
-                <a href="/signup">
-                  Registrarse
-                </a>
+                <a href="/signup">Registrarse</a>
               </h6>
             </div>
 
@@ -141,17 +140,15 @@ const AuthForm = props => {
   );
 };
 
-AuthForm.propTypes = {
+Login.propTypes = {
   showLogo: PropTypes.bool,
-  onLogoClick: PropTypes.func,
   usernameLabel: PropTypes.string,
   usernameInputProps: PropTypes.object,
   passwordLabel: PropTypes.string,
   passwordInputProps: PropTypes.object,
 };
 
-AuthForm.defaultProps = {
-  authState: 'LOGIN',
+Login.defaultProps = {
   showLogo: true,
   usernameLabel: 'Nombre de Usuario',
   usernameInputProps: {
@@ -164,9 +161,8 @@ AuthForm.defaultProps = {
     name: 'Password',
     type: 'password',
     placeholder: 'Ingrese su contraseña',
+    autoComplete: 'on',
   },
-
-  onLogoClick: () => {},
 };
 
-export default AuthForm;
+export default Login;

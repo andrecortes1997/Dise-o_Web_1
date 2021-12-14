@@ -1,4 +1,5 @@
 import { Content, Footer, Header, Sidebar } from 'components/Layout';
+import { Redirect } from 'react-router-dom';
 import React from 'react';
 import {
   MdImportantDevices,
@@ -7,8 +8,16 @@ import {
 } from 'react-icons/md';
 import NotificationSystem from 'react-notification-system';
 import { NOTIFICATION_SYSTEM_STYLE } from 'utils/constants';
+import { getToken } from '../../services/API';
+import jwt_decode from 'jwt-decode';
 
 class MainLayout extends React.Component {
+  state = {
+    isAuth: true,
+    token: getToken(),
+    isValidToken: true,
+  };
+
   static isSidebarOpen() {
     return document
       .querySelector('.cr-sidebar')
@@ -21,8 +30,40 @@ class MainLayout extends React.Component {
     }
   }
 
+  checkToken() {
+    const { token, isValidToken } = this.state;
+
+    if (token) {
+      const decodedToken = jwt_decode(token);
+      const currentDate = new Date();
+      const expiryDate = new Date(decodedToken.exp * 1000);
+
+      this.setState({
+        isValidToken: expiryDate < currentDate.getTime() ? false : true,
+      });
+
+      if (!isValidToken) {
+        localStorage.clear();
+        console.log('Component Did Mount: Token Expired');
+      }
+
+      this.setState({ isAuth: isValidToken });
+    } else {
+      console.log('Component Did Mount: No Token');
+      this.setState({ isAuth: false });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { token, isValidToken } = this.state;
+    if (prevState.token !== token || prevState.isValidToken !== isValidToken) {
+      this.checkToken();
+    }
+  }
+
   componentDidMount() {
     this.checkBreakpoint(this.props.breakpoint);
+    this.checkToken();
 
     // setTimeout(() => {
     //   if (!this.notificationSystem) {
@@ -93,7 +134,7 @@ class MainLayout extends React.Component {
         <Sidebar />
         <Content fluid onClick={this.handleContentClick}>
           <Header />
-          {children}
+          {this.state.isAuth ? children : <Redirect to="/login" />}
           <Footer />
         </Content>
 

@@ -2,24 +2,32 @@ import Page from 'components/Page';
 import React, { useState } from 'react';
 import { Card, CardBody, Col, Row, Table, Button } from 'reactstrap';
 import Swal from 'sweetalert2';
+import ExportTarjeta from './ExportTarjeta';
 
-import { useTarjeta } from '../../../hooks/useTarjeta';
-import InsertTarjeta from './InsertTarjeta';
-import UpdateTarjeta from './UpdateTarjeta';
+import { useMantenimientos } from '../../../hooks/useMantenimientos';
+import ModalInsert from './ModalInsert';
+import ModalUpdate from './ModalUpdate.js';
+import PieChart from '../../ChartJS/PieChart';
+
+import CreditCard from '../../Card/CreditCard';
 
 const Tarjeta = () => {
   const emptyTarjeta = {
+    CodigoUsuario: '',
     Descripcion: '',
     Numero: '',
-    FechaEmision: '',
+    CVC: '',
     FechaVencimiento: '',
-    Estado: '',
+    Estado: 'A',
   };
 
+  const { useUsuario, useTarjeta, useCharts } = useMantenimientos();
+  const { usuarios } = useUsuario();
   const { tarjetas, postTarjeta, putTarjeta, deleteTarjeta } = useTarjeta();
   const [tarjeta, setTarjeta] = useState(emptyTarjeta);
   const [modalInsert, setModalInsert] = useState(false);
   const [modalUpdate, setModalUpdate] = useState(false);
+  const [isExport, setIsExport] = useState(false);
 
   const clearTarjeta = () => {
     setTarjeta({ ...emptyTarjeta });
@@ -54,15 +62,23 @@ const Tarjeta = () => {
   };
 
   const handlePostTarjeta = () => {
-    const { Descripcion, Numero, FechaEmision, FechaVencimiento, Estado } =
-      tarjeta;
+    const {
+      CodigoUsuario,
+      Descripcion,
+      Numero,
+      CVC,
+      FechaVencimiento,
+      Estado,
+    } = tarjeta;
 
-    !Descripcion
+    !CodigoUsuario
+      ? handleError(1, 'codigo de usuario')
+      : !Descripcion
       ? handleError(1, 'descripcion')
       : !Numero
       ? handleError(1, 'numero')
-      : !FechaEmision
-      ? handleError(1, 'fecha de emision')
+      : !CVC
+      ? handleError(1, 'CVC')
       : !FechaVencimiento
       ? handleError(1, 'fecha de vencimiento')
       : !Estado
@@ -73,15 +89,23 @@ const Tarjeta = () => {
   };
 
   const handlePutTarjeta = () => {
-    const { Descripcion, Numero, FechaEmision, FechaVencimiento, Estado } =
-      tarjeta;
+    const {
+      CodigoUsuario,
+      Descripcion,
+      Numero,
+      CVC,
+      FechaVencimiento,
+      Estado,
+    } = tarjeta;
 
-    !Descripcion
+    !CodigoUsuario
+      ? handleError(1, 'codigo de usuario')
+      : !Descripcion
       ? handleError(1, 'descripcion')
       : !Numero
       ? handleError(1, 'numero')
-      : !FechaEmision
-      ? handleError(1, 'fecha de emision')
+      : !CVC
+      ? handleError(1, 'CVC')
       : !FechaVencimiento
       ? handleError(1, 'fecha de vencimiento')
       : !Estado
@@ -111,76 +135,190 @@ const Tarjeta = () => {
     });
   };
 
+  //#region Chart Tarjeta
+
+  const chartUsuarioData = () => {
+    const data = tarjetas.map(tarjeta => tarjeta.CodigoUsuario).sort((a, b) => a - b);
+
+    const filteredData = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const labels = filteredData.map(tarjeta =>
+      usuarios
+        .filter(usuario => usuario.Codigo === tarjeta)
+        .map(usuario => usuario.Nombre),
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  const chartTarjetaData = () => {
+    const data = tarjetas.map(tarjeta => tarjeta.Descripcion).sort((a, b) => a - b);
+
+    const labels = data.filter(
+      (item, index, arr) => arr.indexOf(item) === index,
+    );
+
+    const doughnutPiePago = useCharts(data, labels);
+    return doughnutPiePago.getChartData();
+  };
+
+  //#endregion Chart Tarjeta
+
   return (
-    <Page title="Tarjetas" className="TablePage">
-      <Card className="mb-3">
-        <CardBody>
-          <Row>
-            <Col>
-              <Table dark bordered>
-                <thead>
-                  <tr>
-                    <th>Código</th>
-                    <th>Descripción</th>
-                    <th>Número de Tarjeta</th>
-                    <th>Fecha de Emisión</th>
-                    <th>Fecha de Vencimiento</th>
-                    <th>Estado</th>
-                    <th>Editar</th>
-                    <th>Eliminar</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {tarjetas &&
-                    tarjetas.map(tarjeta => {
-                      return (
-                        <tr key={tarjeta && tarjeta.Codigo}>
-                          <td>{tarjeta && tarjeta.Codigo}</td>
-                          <td>{tarjeta && tarjeta.Descripcion}</td>
-                          <td>{tarjeta && tarjeta.Numero}</td>
-                          <td>{tarjeta && tarjeta.FechaEmision}</td>
-                          <td>{tarjeta && tarjeta.FechaVencimiento}</td>
-                          <td>
-                            {tarjeta && tarjeta.Estado === 'A'
-                              ? 'Activo'
-                              : 'Inactivo'}
-                          </td>
-                          <td>
-                            <Button
-                              className="btn btn-info"
-                              onClick={() => {
-                                setTarjeta(tarjeta);
-                                setModalUpdate(!modalUpdate);
-                              }}
-                            >
-                              Editar
-                            </Button>
-                          </td>
-                          <td>
-                            <Button
-                              className="btn btn-primary"
-                              onClick={() => handleDeleteTarjeta(tarjeta)}
-                            >
-                              Eliminar
-                            </Button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </Table>
-              <Button
-                className="btn btn-success btn-lg btn-block"
-                onClick={() => setModalInsert(!modalInsert)}
-              >
-                Ingresar
-              </Button>
-            </Col>
-          </Row>
-        </CardBody>
-      </Card>
-      <InsertTarjeta
-        tarjeta={tarjeta}
+    <>
+      {isExport ? (
+        <ExportTarjeta
+          tarjetas={tarjetas}
+          usuarios={usuarios}
+          isExport={isExport}
+          setIsExport={setIsExport}
+        />
+      ) : (
+        <Page title="Tarjetas" className="TablePage">
+          <Card className="mb-3">
+            <CardBody>
+              <Row>
+                <Col>
+                  <Table dark bordered>
+                    <thead className="text-center">
+                      <tr>
+                        <th>Código</th>
+                        <th>Usuario</th>
+                        <th>Descripción</th>
+                        <th>Número de Tarjeta</th>
+                        <th>CVC</th>
+                        <th>Fecha de Vencimiento</th>
+                        <th>Estado</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-center">
+                      {tarjetas &&
+                        tarjetas.map(tarjeta => {
+                          return (
+                            tarjeta.Estado === 'A' && (
+                              <tr key={tarjeta && tarjeta.Codigo}>
+                                <td>{tarjeta && tarjeta.Codigo}</td>
+
+                                {usuarios
+                                  .filter(
+                                    usuario =>
+                                      usuario.Codigo === tarjeta.CodigoUsuario,
+                                  )
+                                  .map(usuario => (
+                                    <td key={usuario && usuario.Codigo}>
+                                      {usuario && usuario.Nombre}
+                                    </td>
+                                  ))}
+
+                                <td>{tarjeta && tarjeta.Descripcion}</td>
+                                <td>{tarjeta && tarjeta.Numero}</td>
+                                <td>{tarjeta && tarjeta.CVC}</td>
+                                <td>
+                                  {tarjeta &&
+                                    tarjeta.FechaVencimiento.replaceAll(
+                                      '-',
+                                      '/',
+                                    ).replace('T', ' ')}
+                                </td>
+                                <td>
+                                  {tarjeta && tarjeta.Estado === 'A'
+                                    ? 'Activo'
+                                    : 'Inactivo'}
+                                </td>
+                                <td>
+                                  <Button
+                                    className="btn btn-info"
+                                    onClick={() => {
+                                      setTarjeta(tarjeta);
+                                      setModalUpdate(!modalUpdate);
+                                    }}
+                                  >
+                                    Editar
+                                  </Button>
+                                </td>
+                                <td>
+                                  <Button
+                                    className="btn btn-primary"
+                                    onClick={() => handleDeleteTarjeta(tarjeta)}
+                                  >
+                                    Eliminar
+                                  </Button>
+                                </td>
+                              </tr>
+                            )
+                          );
+                        })}
+                    </tbody>
+                  </Table>
+                  <Button
+                    className="btn btn-info btn-lg btn-block"
+                    onClick={() => setModalInsert(!modalInsert)}
+                  >
+                    Ingresar
+                  </Button>
+                  <Button
+                    className="btn btn-primary btn-lg btn-block"
+                    onClick={() => setIsExport(!isExport)}
+                  >
+                    Exportar
+                  </Button>
+                </Col>
+              </Row>
+            </CardBody>
+            <CardBody className="mb-2">
+              <Row className="justify-content-center">
+                {tarjetas.map(
+                  tarjeta =>
+                    tarjeta.Estado === 'A' && (
+                      <div key={tarjeta && tarjeta.Codigo}>
+                        {usuarios
+                          .filter(
+                            usuario => usuario.Codigo === tarjeta.CodigoUsuario,
+                          )
+                          .map(usuario => (
+                            <CreditCard
+                              key={usuario && usuario.Codigo}
+                              tarjeta={tarjeta}
+                              name={usuario.Nombre}
+                            />
+                          ))}
+                        <br />
+                      </div>
+                    ),
+                )}
+              </Row>
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardBody>
+              <Row>
+                <Col>
+                  <PieChart
+                    title="Tarjetas"
+                    descripcion="Usuarios con más tarjetas"
+                    data={chartUsuarioData}
+                  />
+                </Col>
+                <Col>
+                  <PieChart
+                    title="Tarjetas"
+                    descripcion="Tipo de tarjeta más utilizada"
+                    data={chartTarjetaData}
+                  />
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </Page>
+      )}
+
+      <ModalInsert
         modalInsert={modalInsert}
         handleChange={handleChange}
         handlePostTarjeta={handlePostTarjeta}
@@ -188,7 +326,7 @@ const Tarjeta = () => {
         clearTarjeta={clearTarjeta}
       />
 
-      <UpdateTarjeta
+      <ModalUpdate
         modalUpdate={modalUpdate}
         tarjeta={tarjeta}
         handleChange={handleChange}
@@ -196,7 +334,7 @@ const Tarjeta = () => {
         setModalUpdate={setModalUpdate}
         clearTarjeta={clearTarjeta}
       />
-    </Page>
+    </>
   );
 };
 

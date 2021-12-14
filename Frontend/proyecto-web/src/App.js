@@ -22,16 +22,38 @@ const FormPage = React.lazy(() => import('pages/FormPage'));
 const InputGroupPage = React.lazy(() => import('pages/InputGroupPage'));
 const ModalPage = React.lazy(() => import('pages/ModalPage'));
 const ProgressPage = React.lazy(() => import('pages/ProgressPage'));
-const Tarjeta = React.lazy(() => import('./components/Mantenimientos/Tarjeta/Tarjeta'));
-const CtaDebito = React.lazy(() => import('./components/Mantenimientos/CtaDebito/CtaDebito'));
-const CtaCredito = React.lazy(() => import('./components/Mantenimientos/CtaCredito/CtaCredito'));
 const TypographyPage = React.lazy(() => import('pages/TypographyPage'));
 const WidgetPage = React.lazy(() => import('pages/WidgetPage'));
 
-/* Routes */
+// Mantenimientos
 
-//const PublicRoute = React.lazy(() => import('./Routes/PublicRoute'));
-//const PrivateRoute = React.lazy(() => import('./Routes/PrivateRoute'));
+const Moneda = React.lazy(() =>
+  import('./components/Mantenimientos/Moneda/Moneda'),
+);
+const Servicio = React.lazy(() =>
+  import('./components/Mantenimientos/Servicio/Servicio'),
+);
+const Pago = React.lazy(() => import('./components/Mantenimientos/Pago/Pago'));
+const Sesion = React.lazy(() =>
+  import('./components/Mantenimientos/Sesion/Sesion'),
+);
+const Estadistica = React.lazy(() =>
+  import('./components/Mantenimientos/Estadistica/Estadistica'),
+);
+const Tarjeta = React.lazy(() =>
+  import('./components/Mantenimientos/Tarjeta/Tarjeta'),
+);
+const Transferencia = React.lazy(() =>
+  import('./components/Mantenimientos/Transferencia/Transferencia'),
+);
+const Cuenta_Debito = React.lazy(() =>
+  import('./components/Mantenimientos/Cuenta_Debito/Cuenta_Debito'),
+);
+const Cuenta_Credito = React.lazy(() =>
+  import('./components/Mantenimientos/Cuenta_Credito/Cuenta_Credito'),
+);
+
+/* Routes */
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -47,43 +69,48 @@ class App extends React.Component {
               exact
               path="/login"
               layout={EmptyLayout}
-              component={props => (
-                <Login {...props} />
-              )}
+              component={props => <Login {...props} />}
             />
             <LayoutRoute
               exact
               path="/signup"
               layout={EmptyLayout}
-              component={props => (
-                <Register {...props} />
-              )}
+              component={props => <Register {...props} />}
             />
 
             <MainLayout breakpoint={this.props.breakpoint}>
               <React.Suspense fallback={<PageSpinner />}>
                 <Route exact path="/" component={DashboardPage} />
-                <Route exact path="/login-modal" component={AuthModalPage} />
+
+                <Route exact path="/monedas" component={Moneda} />
+                <Route exact path="/servicios" component={Servicio} />
+                <Route exact path="/pagos" component={Pago} />
+                <Route exact path="/sesiones" component={Sesion} />
+                <Route exact path="/estadisticas" component={Estadistica} />
+                <Route exact path="/tarjetas" component={Tarjeta} />
+                <Route exact path="/transferencias" component={Transferencia} />
+                <Route exact path="/cuentas_debito" component={Cuenta_Debito} />
+                <Route
+                  exact
+                  path="/cuentas_credito"
+                  component={Cuenta_Credito}
+                />
+
+                {/* <Route exact path="/login-modal" component={AuthModalPage} />
                 <Route exact path="/buttons" component={ButtonPage} />
                 <Route exact path="/cards" component={CardPage} />
                 <Route exact path="/widgets" component={WidgetPage} />
                 <Route exact path="/typography" component={TypographyPage} />
                 <Route exact path="/alerts" component={AlertPage} />
-                <Route exact path="/tarjetas" component={Tarjeta} />
-                <Route exact path="/CtaDebitoes" component={CtaDebito} />
-                <Route exact path="/CtaCreditoes" component={CtaCredito} />
                 <Route exact path="/badges" component={BadgePage} />
-                <Route
-                  exact
-                  path="/button-groups"
-                  component={ButtonGroupPage}
-                />
+                <Route exact path="/button-groups" component={ButtonGroupPage} />
                 <Route exact path="/dropdowns" component={DropdownPage} />
                 <Route exact path="/progress" component={ProgressPage} />
                 <Route exact path="/modals" component={ModalPage} />
                 <Route exact path="/forms" component={FormPage} />
                 <Route exact path="/input-groups" component={InputGroupPage} />
-                <Route exact path="/charts" component={ChartPage} />
+                <Route exact path="/charts" component={ChartPage} /> */}
+                
               </React.Suspense>
             </MainLayout>
             <Redirect to="/" />

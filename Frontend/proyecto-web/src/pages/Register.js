@@ -1,23 +1,31 @@
 import E_Corp from 'assets/img/logo/E_Corp.PNG';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Row, Col, Card, Button, Form, FormGroup, Input, Label } from 'reactstrap';
+import {
+  Row,
+  Col,
+  Card,
+  Button,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+} from 'reactstrap';
 import Swal from 'sweetalert2';
-import { Redirect } from 'react-router-dom';
 import { register } from '../services/Register';
 
-const AuthForm = props => {
+const Register = props => {
   const emptyForm = {
     Identificacion: '',
     Nombre: '',
     Username: '',
     Email: '',
     Password: '',
+    ConfirmPass: '',
     FechaNacimiento: '',
     Estado: 'A',
   };
 
-  const [isAuth, setIsAuth] = useState(false);
   const [registerForm, setRegisterForm] = useState(emptyForm);
 
   const {
@@ -29,7 +37,6 @@ const AuthForm = props => {
     confirmPasswordLabel,
     confirmPasswordInputProps,
     children,
-    onLogoClick,
     identificacionLabel,
     identificacionInputProps,
     nombreLabel,
@@ -50,7 +57,6 @@ const AuthForm = props => {
       ...prevState,
       [name]: value,
     }));
-    console.log(registerForm);
   };
 
   const handleRegisterErrors = (option, campo) => {
@@ -67,6 +73,8 @@ const AuthForm = props => {
           'error',
         )
       : option === 3
+      ? Swal.fire('Error de Registro', 'Las contraseñas no coinciden', 'error')
+      : option === 4
       ? Swal.fire(
           'Error de registro',
           'Revise sus credenciales o intente más tarde',
@@ -85,11 +93,11 @@ const AuthForm = props => {
         if (status === 200) {
           props.history.push('/login');
         }
-        handleRegisterErrors(4);
+        handleRegisterErrors(5);
       })
       .catch(e => {
         console.log(e);
-        handleRegisterErrors(3);
+        handleRegisterErrors(4);
       });
   };
 
@@ -100,6 +108,7 @@ const AuthForm = props => {
       Username,
       Email,
       Password,
+      ConfirmPass,
       FechaNacimiento,
     } = registerForm;
 
@@ -111,6 +120,10 @@ const AuthForm = props => {
       ? handleRegisterErrors(1, 'nombre de usuario')
       : !Password
       ? handleRegisterErrors(1, 'contraseña')
+      : !ConfirmPass
+      ? handleRegisterErrors(1, 'confirmar contraseña')
+      : ConfirmPass !== Password
+      ? handleRegisterErrors(3)
       : !Identificacion
       ? handleRegisterErrors(1, 'identificacion')
       : !Nombre
@@ -142,7 +155,6 @@ const AuthForm = props => {
                   className="rounded"
                   style={{ width: 60, height: 60, cursor: 'pointer' }}
                   alt="logo"
-                  onClick={onLogoClick}
                 />
               </div>
             )}
@@ -178,14 +190,6 @@ const AuthForm = props => {
               </FormGroup>
             </>
 
-            {/*<FormGroup check>
-          <Label check>
-            <Input type="checkbox" />{' '}
-            {isSignup ? 'Agree the terms and policy' : 'Remember me'}
-          </Label>
-        </FormGroup> 
-        <hr />*/}
-
             <Button
               size="lg"
               className="bg-gradient-theme-left border-0"
@@ -193,15 +197,12 @@ const AuthForm = props => {
               onClick={handleRegister}
             >
               Registrarse
-              {isAuth && <Redirect to="/" />}
             </Button>
 
             <div className="text-center pt-1">
               <h6>o</h6>
               <h6>
-                <a href="/login">
-                  Login
-                </a>
+                <a href="/login">Login</a>
               </h6>
             </div>
 
@@ -213,13 +214,8 @@ const AuthForm = props => {
   );
 };
 
-export const STATE_LOGIN = 'LOGIN';
-export const STATE_SIGNUP = 'SIGNUP';
-
-AuthForm.propTypes = {
-  authState: PropTypes.oneOf([STATE_LOGIN, STATE_SIGNUP]).isRequired,
+Register.propTypes = {
   showLogo: PropTypes.bool,
-  onLogoClick: PropTypes.func,
   usernameLabel: PropTypes.string,
   usernameInputProps: PropTypes.object,
   passwordLabel: PropTypes.string,
@@ -236,26 +232,28 @@ AuthForm.propTypes = {
   fechaNacimientoInputProps: PropTypes.object,
 };
 
-AuthForm.defaultProps = {
-  authState: 'LOGIN',
+Register.defaultProps = {
   showLogo: true,
   usernameLabel: 'Nombre de Usuario',
   usernameInputProps: {
     name: 'Username',
     type: 'text',
     placeholder: 'Ingrese su nombre de usuario',
+    autoComplete: 'username',
   },
   passwordLabel: 'Contraseña',
   passwordInputProps: {
     name: 'Password',
     type: 'password',
     placeholder: 'Ingrese su contraseña',
+    autoComplete: 'new-password',
   },
   confirmPasswordLabel: 'Confirmar Contraseña',
   confirmPasswordInputProps: {
     name: 'ConfirmPass',
     type: 'password',
     placeholder: 'Confirme su contraseña',
+    autoComplete: 'new-password',
   },
 
   identificacionLabel: 'Identificación',
@@ -264,11 +262,11 @@ AuthForm.defaultProps = {
     type: 'text',
     placeholder: 'Ingrese su identificación',
   },
-  nombreLabel: 'Nombre',
+  nombreLabel: 'Nombre Completo',
   nombreInputProps: {
     name: 'Nombre',
     type: 'text',
-    placeholder: 'Ingrese su nombre',
+    placeholder: 'Ingrese su nombre completo',
   },
   emailLabel: 'Email',
   emailInputProps: {
@@ -282,8 +280,6 @@ AuthForm.defaultProps = {
     type: 'date',
     placeholder: 'Ingrese su fecha de nacimiento',
   },
-
-  onLogoClick: () => {},
 };
 
-export default AuthForm;
+export default Register;

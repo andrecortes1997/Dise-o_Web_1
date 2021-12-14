@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { baseUrl, getToken, getConfig } from "../services/API";
 
-const url = baseUrl + "Tarjetas/";
+const url = baseUrl + "Tarjeta/";
 
 export const useTarjeta = () => {
   const [tarjetas, setTarjetas] = useState([]);
@@ -43,9 +43,10 @@ export const useTarjeta = () => {
         const newData = tarjetas;
         newData.map((item) => {
           if (tarjeta.Codigo === item.Codigo) {
+            item.CodigoUsuario = tarjeta.CodigoUsuario;
             item.Descripcion = tarjeta.Descripcion;
             item.Numero = tarjeta.Numero;
-            item.FechaEmision = tarjeta.FechaEmision;
+            item.CVC = tarjeta.CVC;
             item.FechaVencimiento = tarjeta.FechaVencimiento;
             item.Estado = tarjeta.Estado;
           }

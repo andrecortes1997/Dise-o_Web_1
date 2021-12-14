@@ -4,18 +4,14 @@ import Notifications from 'components/Notifications';
 import SearchInput from 'components/SearchInput';
 import { notificationsData } from 'demos/header';
 import withBadge from 'hocs/withBadge';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   MdClearAll,
   MdExitToApp,
-  MdHelp,
   MdInsertChart,
-  MdMessage,
   MdNotificationsActive,
-  MdNotificationsNone,
   MdPersonPin,
-  MdSettingsApplications,
 } from 'react-icons/md';
 import {
   Button,
@@ -30,6 +26,8 @@ import {
   PopoverBody,
 } from 'reactstrap';
 import bn from 'utils/bemnames';
+
+import { useMantenimientos } from '../../hooks/useMantenimientos';
 
 const bem = bn.create('header');
 
@@ -46,71 +44,65 @@ const MdNotificationsActiveWithBadge = withBadge({
   children: <small>5</small>,
 })(MdNotificationsActive);
 
-class Header extends React.Component {
-  state = {
-    isOpenNotificationPopover: false,
-    isNotificationConfirmed: false,
-    isOpenUserCardPopover: false,
-  };
+const Header = () => {
+  const [isOpenNotificationPopover, setIsOpenNotificationPopover] =
+    useState(false);
+  const [isNotificationConfirmed, setIsNotificationConfirmed] = useState(false);
+  const [isOpenUserCardPopover, setIsOpenUserCardPopover] = useState(false);
+  const { useUsuario } = useMantenimientos();
+  const { usuario } = useUsuario();
 
-  toggleNotificationPopover = () => {
-    this.setState({
-      isOpenNotificationPopover: !this.state.isOpenNotificationPopover,
-    });
+  const toggleNotificationPopover = () => {
+    setIsOpenNotificationPopover(!isOpenNotificationPopover);
 
-    if (!this.state.isNotificationConfirmed) {
-      this.setState({ isNotificationConfirmed: true });
+    if (!isNotificationConfirmed) {
+      setIsNotificationConfirmed(true);
     }
   };
 
-  toggleUserCardPopover = () => {
-    this.setState({
-      isOpenUserCardPopover: !this.state.isOpenUserCardPopover,
-    });
+  const toggleUserCardPopover = () => {
+    setIsOpenUserCardPopover(!isOpenUserCardPopover);
   };
 
-  handleSidebarControlButton = event => {
+  const handleSidebarControlButton = event => {
     event.preventDefault();
     event.stopPropagation();
 
     document.querySelector('.cr-sidebar').classList.toggle('cr-sidebar--open');
   };
 
-  render() {
-    const { isNotificationConfirmed } = this.state;
+  return (
+    <Navbar light expand className={bem.b('bg-white')}>
+      <Nav navbar className="mr-2">
+        <Button outline onClick={handleSidebarControlButton}>
+          <MdClearAll size={25} />
+        </Button>
+      </Nav>
+      <Nav navbar>
+        <SearchInput />
+      </Nav>
 
-    return (
-      <Navbar light expand className={bem.b('bg-white')}>
-        <Nav navbar className="mr-2">
-          <Button outline onClick={this.handleSidebarControlButton}>
-            <MdClearAll size={25} />
-          </Button>
-        </Nav>
-        <Nav navbar>
-          <SearchInput />
-        </Nav>
-
-        <Nav navbar className={bem.e('nav-right')}>
-          {/* <NavItem className="d-inline-flex">
+      <Nav navbar className={bem.e('nav-right')}>
+        {/* <NavItem className="d-inline-flex">
             <NavLink id="Popover1" className="position-relative">
               {isNotificationConfirmed ? (
                 <MdNotificationsNone
                   size={25}
                   className="text-secondary can-click"
-                  onClick={this.toggleNotificationPopover}
+                  onClick={toggleNotificationPopover}
                 />
               ) : (
                 <MdNotificationsActiveWithBadge
                   size={25}
                   className="text-secondary can-click animated swing infinite"
-                  onClick={this.toggleNotificationPopover}
+                  onClick={toggleNotificationPopover}
                 />
               )}
             </NavLink>
             <Popover
               placement="bottom"
-              isOpen={this.state.isOpenNotificationPopover}
-              toggle={this.toggleNotificationPopover}
+              isOpen={isOpenNotificationPopover}
+              toggle={toggleNotificationPopover}
               target="Popover1"
             >
               <PopoverBody>
@@ -119,58 +111,45 @@ class Header extends React.Component {
             </Popover>
           </NavItem> */}
 
-          <NavItem>
-            <NavLink id="Popover2">
-              <Avatar
-                onClick={this.toggleUserCardPopover}
-                className="can-click"
-              />
-            </NavLink>
-            <Popover
-              placement="bottom-end"
-              isOpen={this.state.isOpenUserCardPopover}
-              toggle={this.toggleUserCardPopover}
-              target="Popover2"
-              className="p-0 border-0"
-              style={{ minWidth: 250 }}
-            >
-              <PopoverBody className="p-0 border-light">
-                <UserCard
-                  title={localStorage.getItem('name') || 'André'}
-                  subtitle="jane@jane.com"
-                  text="Last updated 3 mins ago"
-                  className="border-light"
-                >
-                  <ListGroup flush>
+        <NavItem>
+          <NavLink id="Popover2">
+            <Avatar onClick={toggleUserCardPopover} className="can-click" />
+          </NavLink>
+          <Popover
+            placement="bottom-end"
+            isOpen={isOpenUserCardPopover}
+            toggle={toggleUserCardPopover}
+            target="Popover2"
+            className="p-0 border-0"
+            style={{ minWidth: 250 }}
+          >
+            <PopoverBody className="p-0 border-light">
+              <UserCard
+                title={usuario.Nombre || 'Nombre'}
+                subtitle={usuario.Email || "mail@gmail.com"}
+                className="border-light"
+              >
+                <ListGroup flush>
+                  <ListGroupItem tag="button" action className="border-light">
+                    <MdPersonPin /> Perfil
+                  </ListGroupItem>
+                  <Link
+                    style={{ textDecoration: 'none' }}
+                    to="/login"
+                    onClick={() => localStorage.clear()}
+                  >
                     <ListGroupItem tag="button" action className="border-light">
-                      <MdPersonPin /> Profile
+                      <MdExitToApp /> Cerrar Sesión
                     </ListGroupItem>
-                    <ListGroupItem tag="button" action className="border-light">
-                      <MdInsertChart /> Stats
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" action className="border-light">
-                      <MdMessage /> Messages
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" action className="border-light">
-                      <MdSettingsApplications /> Settings
-                    </ListGroupItem>
-                    <ListGroupItem tag="button" action className="border-light">
-                      <MdHelp /> Help
-                    </ListGroupItem>
-                    <Link style={{ textDecoration: 'none' }} to='/login' onClick={() => localStorage.clear()}> 
-                    <ListGroupItem tag="button" action className="border-light">
-                    <MdExitToApp /> Cerrar Sesión
-                    </ListGroupItem>
-                    </Link>
-                  </ListGroup>
-                </UserCard>
-              </PopoverBody>
-            </Popover>
-          </NavItem>
-        </Nav>
-      </Navbar>
-    );
-  }
-}
+                  </Link>
+                </ListGroup>
+              </UserCard>
+            </PopoverBody>
+          </Popover>
+        </NavItem>
+      </Nav>
+    </Navbar>
+  );
+};
 
 export default Header;

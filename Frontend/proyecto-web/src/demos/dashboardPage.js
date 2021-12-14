@@ -175,6 +175,36 @@ export const userProgressTableData = [
     date: '2 years ago',
     progress: 25,
   },
+  {
+    avatar: user6Image,
+    name: 'Danna',
+    date: '2 years ago',
+    progress: 25,
+  },
+  {
+    avatar: user6Image,
+    name: 'Danna',
+    date: '2 years ago',
+    progress: 25,
+  },
+  {
+    avatar: user6Image,
+    name: 'Danna',
+    date: '2 years ago',
+    progress: 25,
+  },
+  {
+    avatar: user6Image,
+    name: 'Danna',
+    date: '2 years ago',
+    progress: 25,
+  },
+  {
+    avatar: user6Image,
+    name: 'Danna',
+    date: '2 years ago',
+    progress: 25,
+  },
 ];
 
 export const supportTicketsData = [
