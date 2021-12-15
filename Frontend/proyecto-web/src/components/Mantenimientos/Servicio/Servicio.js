@@ -14,9 +14,10 @@ const Servicio = () => {
     Estado: 'A',
   };
 
-  const { useServicio } = useMantenimientos();
+  const { useServicio, useEstadistica } = useMantenimientos();
   const { servicios, postServicio, putServicio, deleteServicio } =
     useServicio();
+    const { postEstadistica } = useEstadistica();
   const [servicio, setServicio] = useState(emptyServicio);
   const [modalInsert, setModalInsert] = useState(false);
   const [modalUpdate, setModalUpdate] = useState(false);
@@ -62,6 +63,7 @@ const Servicio = () => {
       : !Estado
       ? handleError(1, 'estado')
       : postServicio(servicio)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Servicio', 'Ingresar Servicio'))
           .then(() => setModalInsert(!modalInsert))
           .then(() => clearServicio());
   };
@@ -74,6 +76,7 @@ const Servicio = () => {
       : !Estado
       ? handleError(1, 'estado')
       : putServicio(servicio)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Servicio', 'Actualizar Servicio'))
           .then(() => setModalUpdate(!modalUpdate))
           .then(() => clearServicio());
   };
@@ -91,6 +94,7 @@ const Servicio = () => {
     }).then(result => {
       if (result.value) {
         deleteServicio(servicio)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Servicio', 'Eliminar Servicio'))
           .then(() => clearServicio())
           .then(() => handleError(3))
           .catch(() => handleError(2));

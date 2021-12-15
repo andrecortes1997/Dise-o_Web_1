@@ -14,8 +14,9 @@ const Moneda = () => {
     Estado: 'A',
   };
 
-  const { useMoneda } = useMantenimientos();
+  const { useMoneda, useEstadistica } = useMantenimientos();
   const { monedas, postMoneda, putMoneda, deleteMoneda } = useMoneda();
+  const { postEstadistica } = useEstadistica();
   const [moneda, setMoneda] = useState(emptyMoneda);
   const [modalInsert, setModalInsert] = useState(false);
   const [modalUpdate, setModalUpdate] = useState(false);
@@ -61,6 +62,7 @@ const Moneda = () => {
       : !Estado
       ? handleError(1, 'estado')
       : postMoneda(moneda)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Moneda', 'Ingresar Moneda'))
           .then(() => setModalInsert(!modalInsert))
           .then(() => clearMoneda());
   };
@@ -73,6 +75,7 @@ const Moneda = () => {
       : !Estado
       ? handleError(1, 'estado')
       : putMoneda(moneda)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Moneda', 'Actualizar Moneda'))
           .then(() => setModalUpdate(!modalUpdate))
           .then(() => clearMoneda());
   };
@@ -90,6 +93,7 @@ const Moneda = () => {
     }).then(result => {
       if (result.value) {
         deleteMoneda(moneda)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Moneda', 'Eliminar Moneda'))
           .then(() => clearMoneda())
           .then(() => handleError(3))
           .catch(() => handleError(2));

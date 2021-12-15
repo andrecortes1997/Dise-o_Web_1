@@ -19,13 +19,14 @@ const Transferencia = () => {
     Estado: 'A',
   };
 
-  const { useTransferencia, useCharts } = useMantenimientos();
+  const { useTransferencia, useEstadistica } = useMantenimientos();
   const {
     transferencias,
     postTransferencia,
     putTransferencia,
     deleteTransferencia,
   } = useTransferencia();
+  const { postEstadistica } = useEstadistica();
   const [modalInsert, setModalInsert] = useState(false);
   const [modalUpdate, setModalUpdate] = useState(false);
   const [transferencia, setTransferencia] = useState(emptyTransferencia);
@@ -86,6 +87,7 @@ const Transferencia = () => {
       : !Estado
       ? handleError(1, 'estado')
       : postTransferencia(transferencia)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Transferencia', 'Ingresar Transferencia'))
           .then(() => setModalInsert(!modalInsert))
           .then(() => clearTransferencia());
   };
@@ -113,6 +115,7 @@ const Transferencia = () => {
       : !Estado
       ? handleError(1, 'estado')
       : putTransferencia(transferencia)
+      .then(() => postEstadistica(localStorage.getItem("Codigo"),'Transferencia', 'Actualizar Transferencia'))
           .then(() => setModalUpdate(!modalUpdate))
           .then(() => clearTransferencia());
   };
@@ -130,6 +133,7 @@ const Transferencia = () => {
     }).then(result => {
       if (result.value) {
         deleteTransferencia(transferencia)
+        .then(() => postEstadistica(localStorage.getItem("Codigo"),'Transferencia', 'Eliminar Transferencia'))
           .then(() => clearTransferencia())
           .then(() => handleError(3))
           .catch(() => handleError(2));

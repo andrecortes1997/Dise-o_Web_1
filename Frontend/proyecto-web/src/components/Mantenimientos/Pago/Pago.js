@@ -19,9 +19,10 @@ const Pago = () => {
     Monto: '',
   };
 
-  const { usePago, useUsuario, useServicio, useTarjeta, useCharts } =
+  const { usePago, useUsuario, useServicio, useTarjeta, useCharts, useEstadistica } =
     useMantenimientos();
   const { pagos, postPago, putPago, deletePago } = usePago();
+  const { postEstadistica } = useEstadistica();
   const { usuarios } = useUsuario();
   const { servicios } = useServicio();
   const { tarjetas } = useTarjeta();
@@ -81,6 +82,7 @@ const Pago = () => {
       : !Monto
       ? handleError(1, 'Monto')
       : postPago(pago)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Pago', 'Ingresar Pago'))
           .then(() => setModalInsert(!modalInsert))
           .then(() => clearPago());
   };
@@ -108,6 +110,7 @@ const Pago = () => {
       : !Monto
       ? handleError(1, 'Monto')
       : putPago(pago)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Pago', 'Actualizar Pago'))
           .then(() => setModalUpdate(!modalUpdate))
           .then(() => clearPago());
   };
@@ -125,6 +128,7 @@ const Pago = () => {
     }).then(result => {
       if (result.value) {
         deletePago(pago)
+            .then(() => postEstadistica(localStorage.getItem("Codigo"),'Pago', 'Eliminar Pago'))
           .then(() => clearPago())
           .then(() => handleError(3))
           .catch(() => handleError(2));

@@ -35,6 +35,19 @@ export const useUsuario = () => {
     }
   }, []);
 
+  const postUsuario = async (usuario) => {
+    console.log(usuario)
+    const token = getToken();
+    const config = getConfig(token);
+    await axios
+      .post(url, usuario, config)
+      .then((response) => {
+        const { data } = response;
+        setUsuarios(usuarios.concat(data));
+      })
+      .then(() => getUsuarios());
+  };
+
   const putUsuario = async (usuario) => {
     const token = getToken();
     const config = getConfig(token);
@@ -75,6 +88,7 @@ export const useUsuario = () => {
   return {
     usuarios,
     usuario,
+    postUsuario,
     putUsuario,
     deleteUsuario,
   };

@@ -20,8 +20,9 @@ const Cuenta_Debito = () => {
     Estado: 'A',
   };
 
-  const { useUsuario, useMoneda, useTarjeta, useCuenta_Debito, useCharts } =
+  const { useUsuario, useMoneda, useTarjeta, useCuenta_Debito, useCharts, useEstadistica } =
     useMantenimientos();
+  const { postEstadistica } = useEstadistica();
   const { usuarios } = useUsuario();
   const { monedas } = useMoneda();
   const { tarjetas } = useTarjeta();
@@ -94,6 +95,7 @@ const Cuenta_Debito = () => {
       : !Estado
       ? handleError(1, 'estado')
       : postCuenta_Debito(cuenta_debito)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Cuenta Debito', 'Ingresar Cuenta Debito'))
           .then(() => setModalInsert(!modalInsert))
           .then(() => clearCuenta_Debito());
   };
@@ -124,6 +126,7 @@ const Cuenta_Debito = () => {
       : !Estado
       ? handleError(1, 'estado')
       : putCuenta_Debito(cuenta_debito)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Cuenta Debito', 'Actualizar Cuenta Debito'))
           .then(() => setModalUpdate(!modalUpdate))
           .then(() => clearCuenta_Debito());
   };
@@ -141,6 +144,7 @@ const Cuenta_Debito = () => {
     }).then(result => {
       if (result.value) {
         deleteCuenta_Debito(cuenta_debito)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Cuenta Debito', 'Eliminar Cuenta Debito'))
           .then(() => clearCuenta_Debito())
           .then(() => handleError(3))
           .catch(() => handleError(2));

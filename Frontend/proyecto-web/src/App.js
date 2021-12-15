@@ -27,6 +27,9 @@ const WidgetPage = React.lazy(() => import('pages/WidgetPage'));
 
 // Mantenimientos
 
+const Usuario = React.lazy(() =>
+  import('./components/Mantenimientos/Usuario/Usuario'),
+);
 const Moneda = React.lazy(() =>
   import('./components/Mantenimientos/Moneda/Moneda'),
 );
@@ -81,6 +84,7 @@ class App extends React.Component {
             <MainLayout breakpoint={this.props.breakpoint}>
               <React.Suspense fallback={<PageSpinner />}>
                 <Route exact path="/" component={DashboardPage} />
+                <Route exact path="/usuarios" component={Usuario} />
 
                 <Route exact path="/monedas" component={Moneda} />
                 <Route exact path="/servicios" component={Servicio} />

@@ -14,13 +14,13 @@ import {
 import Swal from 'sweetalert2';
 import { logIn } from '../services/Login';
 
-//import { useMantenimientos } from '../hooks/useMantenimientos';
+import { useMantenimientos } from '../hooks/useMantenimientos';
 
 const Login = props => {
   const [loginForm, setLoginForm] = useState({ Username: '', Password: '' });
-  //const { useSesion, useEstadistica } = useMantenimientos();
-  //const { postEstadistica } = useEstadistica();
-  //const { postSesion } = useSesion();
+  const { useSesion, useEstadistica } = useMantenimientos();
+  const { postEstadistica } = useEstadistica();
+  const { postSesion } = useSesion();
 
   const {
     showLogo,
@@ -65,8 +65,8 @@ const Login = props => {
           const { Token, Codigo } = data;
           localStorage.setItem('token', Token);
           localStorage.setItem('Codigo', Codigo);
-          //postEstadistica(Codigo,'Login', 'Iniciar Sesion')
-          //postSesion(Codigo);
+          postEstadistica(Codigo,'Login', 'Iniciar Sesion')
+          postSesion(Codigo);
           props.history.push('/login');
         }
       })

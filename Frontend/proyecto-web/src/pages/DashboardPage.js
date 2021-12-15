@@ -1,37 +1,18 @@
 import Page from 'components/Page';
 import UserProgressTable from 'components/UserProgressTable';
 import {
-  avatarsData,
-  chartjs,
-  productsData,
-  supportTicketsData,
-  todosData,
   userProgressTableData,
 } from 'demos/dashboardPage';
 import React, { useEffect } from 'react';
 import {
-  MdBubbleChart,
-  MdInsertChart,
   MdPersonPin,
-  MdPieChart,
-  MdRateReview,
-  MdShare,
-  MdShowChart,
-  MdThumbUp,
 } from 'react-icons/md';
 import InfiniteCalendar from 'react-infinite-calendar';
 import {
-  Badge,
-  Button,
   Card,
   CardBody,
-  CardDeck,
-  CardGroup,
   CardHeader,
-  CardTitle,
   Col,
-  ListGroup,
-  ListGroupItem,
   Row,
 } from 'reactstrap';
 import { getColor } from 'utils/colors';
@@ -357,7 +338,7 @@ const DashboardPage = () => {
   return (
     <Page className="DashboardPage" title="Dashboard">
       <Row>
-        <Col md="4" sm="12" xs="12">
+        <Col md="12" sm="12" xs="12">
           <InfiniteCalendar
             selected={today}
             minDate={lastWeek}
@@ -379,23 +360,6 @@ const DashboardPage = () => {
               weekdayColor: secondaryColor,
             }}
           />
-        </Col>
-        <Col md="8" sm="12" xs="12">
-          <Card>
-            <CardHeader>Usuarios</CardHeader>
-            <CardBody>
-              <UserProgressTable
-                headers={[
-                  <MdPersonPin size={25} />,
-                  'name',
-                  'date',
-                  'participation',
-                  '%',
-                ]}
-                usersData={userProgressTableData}
-              />
-            </CardBody>
-          </Card>
         </Col>
       </Row>
 

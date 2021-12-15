@@ -24,8 +24,9 @@ const Cuenta_Credito = () => {
     Estado: 'A',
   };
 
-  const { useUsuario, useMoneda, useTarjeta, useCuenta_Credito, useCharts } =
+  const { useUsuario, useMoneda, useTarjeta, useCuenta_Credito, useCharts, useEstadistica } =
     useMantenimientos();
+  const { postEstadistica } = useEstadistica();
   const { usuarios } = useUsuario();
   const { monedas } = useMoneda();
   const { tarjetas } = useTarjeta();
@@ -107,6 +108,7 @@ const Cuenta_Credito = () => {
       : !Estado
       ? handleError(1, 'estado')
       : postCuenta_Credito(cuenta_credito)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Cuenta Credito', 'Ingresar Cuenta Credito'))
           .then(() => setModalInsert(!modalInsert))
           .then(() => clearCuenta_Credito());
   };
@@ -146,6 +148,7 @@ const Cuenta_Credito = () => {
       : !Estado
       ? handleError(1, 'estado')
       : putCuenta_Credito(cuenta_credito)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Cuenta Credito', 'Actualizar Cuenta Credito'))
           .then(() => setModalUpdate(!modalUpdate))
           .then(() => clearCuenta_Credito());
   };
@@ -163,6 +166,7 @@ const Cuenta_Credito = () => {
     }).then(result => {
       if (result.value) {
         deleteCuenta_Credito(cuenta_credito)
+            .then(() => postEstadistica(localStorage.getItem("Codigo"),'Cuenta Credito', 'Eliminar Cuenta Credito'))
           .then(() => clearCuenta_Credito())
           .then(() => handleError(3))
           .catch(() => handleError(2));

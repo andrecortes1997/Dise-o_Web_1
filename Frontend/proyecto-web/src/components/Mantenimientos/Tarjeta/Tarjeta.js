@@ -21,8 +21,9 @@ const Tarjeta = () => {
     Estado: 'A',
   };
 
-  const { useUsuario, useTarjeta, useCharts } = useMantenimientos();
+  const { useUsuario, useTarjeta, useCharts, useEstadistica } = useMantenimientos();
   const { usuarios } = useUsuario();
+  const { postEstadistica } = useEstadistica();
   const { tarjetas, postTarjeta, putTarjeta, deleteTarjeta } = useTarjeta();
   const [tarjeta, setTarjeta] = useState(emptyTarjeta);
   const [modalInsert, setModalInsert] = useState(false);
@@ -84,6 +85,7 @@ const Tarjeta = () => {
       : !Estado
       ? handleError(1, 'estado')
       : postTarjeta(tarjeta)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Tarjeta', 'Ingresar Tarjeta'))
           .then(() => setModalInsert(!modalInsert))
           .then(() => clearTarjeta());
   };
@@ -111,6 +113,7 @@ const Tarjeta = () => {
       : !Estado
       ? handleError(1, 'estado')
       : putTarjeta(tarjeta)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Tarjeta', 'Actualizar Tarjeta'))
           .then(() => setModalUpdate(!modalUpdate))
           .then(() => clearTarjeta());
   };
@@ -128,6 +131,7 @@ const Tarjeta = () => {
     }).then(result => {
       if (result.value) {
         deleteTarjeta(tarjeta)
+          .then(() => postEstadistica(localStorage.getItem("Codigo"),'Tarjeta', 'Eliminar Tarjeta'))
           .then(() => clearTarjeta())
           .then(() => handleError(3))
           .catch(() => handleError(2));

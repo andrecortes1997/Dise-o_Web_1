@@ -9,9 +9,7 @@ import { Link } from 'react-router-dom';
 import {
   MdClearAll,
   MdExitToApp,
-  MdInsertChart,
   MdNotificationsActive,
-  MdPersonPin,
 } from 'react-icons/md';
 import {
   Button,
@@ -83,34 +81,6 @@ const Header = () => {
       </Nav>
 
       <Nav navbar className={bem.e('nav-right')}>
-        {/* <NavItem className="d-inline-flex">
-            <NavLink id="Popover1" className="position-relative">
-              {isNotificationConfirmed ? (
-                <MdNotificationsNone
-                  size={25}
-                  className="text-secondary can-click"
-                  onClick={toggleNotificationPopover}
-                />
-              ) : (
-                <MdNotificationsActiveWithBadge
-                  size={25}
-                  className="text-secondary can-click animated swing infinite"
-                  onClick={toggleNotificationPopover}
-                />
-              )}
-            </NavLink>
-            <Popover
-              placement="bottom"
-              isOpen={isOpenNotificationPopover}
-              toggle={toggleNotificationPopover}
-              target="Popover1"
-            >
-              <PopoverBody>
-                <Notifications notificationsData={notificationsData} />
-              </PopoverBody>
-            </Popover>
-          </NavItem> */}
-
         <NavItem>
           <NavLink id="Popover2">
             <Avatar onClick={toggleUserCardPopover} className="can-click" />
@@ -130,9 +100,6 @@ const Header = () => {
                 className="border-light"
               >
                 <ListGroup flush>
-                  <ListGroupItem tag="button" action className="border-light">
-                    <MdPersonPin /> Perfil
-                  </ListGroupItem>
                   <Link
                     style={{ textDecoration: 'none' }}
                     to="/login"

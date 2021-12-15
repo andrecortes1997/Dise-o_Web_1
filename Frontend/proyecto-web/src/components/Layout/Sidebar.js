@@ -6,27 +6,21 @@ import { FaGithub } from 'react-icons/fa';
 import {
   MdAccountCircle,
   MdArrowDropDownCircle,
-  MdBorderAll,
   MdBrush,
   MdChromeReaderMode,
   MdDashboard,
   MdAddchart,
   MdGroupWork,
-  MdInsertChart,
   MdKeyboardArrowDown,
   MdNotificationsActive,
-  MdPages,
   MdRadioButtonChecked,
-  MdSend,
   MdStar,
   MdTextFields,
   MdViewCarousel,
   MdViewDay,
   MdViewList,
-  MdWeb,
   MdMiscellaneousServices,
   MdOutlineAttachMoney,
-  MdPayment,
   MdCreditCard,
   MdOutlineAssignment,
   MdAccountBox,
@@ -35,7 +29,8 @@ import {
   MdQueryStats,
   MdAssessment,
   MdOutlineApps,
-  MdCached
+  MdCached,
+  MdOutlineAccountCircle
 } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
 import {
@@ -92,9 +87,7 @@ const pageContents = [
 
 const navItems = [
   { to: '/', name: 'dashboard', exact: true, Icon: MdDashboard },
-  /*{ to: '/cards', name: 'cards', exact: false, Icon: MdWeb },
-  { to: '/charts', name: 'charts', exact: false, Icon: MdInsertChart },
-  { to: '/widgets', name: 'widgets', exact: false, Icon: MdWidgets },*/
+  { to: '/usuarios', name: 'Usuarios', exact: false, Icon: MdOutlineAccountCircle },
 ];
 
 const navServicios = [

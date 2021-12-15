@@ -100,6 +100,45 @@ namespace WebApiSegura.Controllers
             return Ok(usuarios);
         }
 
+        [HttpPost]
+        public IHttpActionResult Ingresar(Usuario usuario)
+        {
+            if (usuario == null)
+                return BadRequest();
+
+            try
+            {
+                using (SqlConnection sqlConnection = new
+                    SqlConnection(ConfigurationManager.ConnectionStrings["INTERNET_BANKING"].ConnectionString))
+                {
+                    SqlCommand sqlCommand = new SqlCommand(@"INSERT INTO Usuario (Identificacion, Nombre, Username, 
+                                                            Password, Email, FechaNacimiento, Estado) VALUES 
+                                                            (@Identificacion, @Nombre, @Username, 
+                                                            @Password, @Email, @FechaNacimiento, @Estado) ", sqlConnection);
+
+                    sqlCommand.Parameters.AddWithValue("@Identificacion", usuario.Identificacion);
+                    sqlCommand.Parameters.AddWithValue("@Nombre", usuario.Nombre);
+                    sqlCommand.Parameters.AddWithValue("@Username", usuario.Username);
+                    sqlCommand.Parameters.AddWithValue("@Password", usuario.Password);
+                    sqlCommand.Parameters.AddWithValue("@Email", usuario.Email);
+                    sqlCommand.Parameters.AddWithValue("@FechaNacimiento", usuario.FechaNacimiento);
+                    sqlCommand.Parameters.AddWithValue("@Estado", usuario.Estado);
+
+                    sqlConnection.Open();
+
+                    int filasAfectadas = sqlCommand.ExecuteNonQuery();
+
+                    sqlConnection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+
+            return Ok(usuario);
+        }
+
         [HttpPut]
         public IHttpActionResult Actualizar(Usuario usuario)
         {
